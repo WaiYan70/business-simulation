@@ -18,7 +18,7 @@ const jetBrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Company Survival Simulator",
+  title: "Kissanten Tycoon",
   description:
     "A business simulation game for learning real-world business decisions.",
 };
