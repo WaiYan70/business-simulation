@@ -1,0 +1,27 @@
+# Domain Glossary
+
+- **Active game:** Started but not completed, archived, or expired.
+- **Agent:** Component that observes constrained context and returns an explanation, proposal, or action within explicit authority.
+- **AI model:** External language model; distinct from a domain model.
+- **Authentication:** Verification of identity.
+- **Authorization:** Verification that a principal may access a resource.
+- **Calculation trace:** Structured intermediate values and reasons behind a result.
+- **Capacity:** Maximum orders the shop can serve in a period.
+- **Completed game:** Game whose final quarter committed successfully.
+- **Completion allowance:** Number of game completions permitted by policy.
+- **Domain model:** TypeScript representation of a game or business concept.
+- **Engine:** Orchestrator applying deterministic rules in a defined order.
+- **Entitlement:** Product rule deciding whether and how much a principal may use a feature.
+- **Game state:** Complete authoritative simulation state at a point in time.
+- **Guest identity:** Pseudonymous pre-authentication browser identity.
+- **Invariant:** Condition that must remain true through a transition.
+- **Lost sales:** Demand not fulfilled because capacity was insufficient.
+- **Potential demand:** Expected orders before capacity is applied.
+- **Principal:** Normalized actor: guest or authenticated user.
+- **Quota window:** Time interval in which usage is counted.
+- **Rule:** Focused deterministic business calculation.
+- **Scenario:** Starting state, configuration, and allowed events for a run.
+- **Seed:** Value used to reproduce controlled pseudo-random choices.
+- **Turn:** One quarterly decision and simulation cycle.
+- **Turn result:** Calculated outcome of one turn.
+- **Usage record:** Immutable record of a completed game for entitlement accounting.
