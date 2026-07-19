@@ -3,14 +3,20 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
-export default function States() {
-  const stats = [
-    ["Net profit (Q2)", "¥620,000"],
-    ["Loyal customers", "923 ▲"],
-    ["Demand", "1000"],
-    ["Staff morale", "48 / 100"],
-  ];
+export const stateSnapshot = {
+  cashOnHand: "¥5,840,000",
+  cashChange: "+¥620,000 last quarter",
+  marketShare: 42,
+} as const;
 
+export const stateStats = [
+  ["Net profit (Q2)", "¥620,000"],
+  ["Loyal customers", "923 ▲"],
+  ["Demand", "1000"],
+  ["Staff morale", "48 / 100"],
+] as const;
+
+export default function States() {
   return (
     <Card className="h-fit rounded-xl border border-border bg-card shadow-none">
       <CardContent className="space-y-6">
@@ -19,15 +25,15 @@ export default function States() {
             Cash on hand
           </p>
           <p className="mt-5 font-mono text-5xl font-bold tracking-tight text-primary">
-            ¥5,840,000
+            {stateSnapshot.cashOnHand}
           </p>
           <p className="mt-1 font-mono text-sm font-semibold text-primary">
-            ▲ +¥620,000 last quarter
+            ▲ {stateSnapshot.cashChange}
           </p>
         </section>
 
         <section className="space-y-3">
-          {stats.map(([label, value]) => (
+          {stateStats.map(([label, value]) => (
             <div key={label}>
               <div className="flex items-center justify-between gap-4 text-base">
                 <span className="text-muted-foreground">{label}</span>

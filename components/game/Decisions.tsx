@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Slider } from "@/components/ui/slider";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import QuarterCommit from "@/components/game/QuarterCommit";
 
 export default function Decisions() {
   return (
@@ -74,19 +75,7 @@ export default function Decisions() {
           </ToggleGroup>
         </DecisionSection>
 
-        <div className="flex items-center gap-5 pt-4">
-          <Button className="size-20 rounded-full border-4 border-primary/20 text-base font-bold">
-            Stamp Q3
-          </Button>
-          <div>
-            <p className="font-serif text-2xl font-bold text-foreground">
-              Commit Quarter
-            </p>
-            <p className="text-sm text-muted-foreground">
-              Decisions are final once stamped
-            </p>
-          </div>
-        </div>
+        <QuarterCommit quarter={3} />
       </CardContent>
     </Card>
   );

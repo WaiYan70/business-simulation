@@ -1,30 +1,51 @@
-export default function Navbar() {
+type NavbarProps = {
+  quarter?: number;
+  totalQuarters?: number;
+  brandAsHeading?: boolean;
+};
+
+export default function Navbar({
+  quarter = 3,
+  totalQuarters = 8,
+  brandAsHeading = true,
+}: NavbarProps) {
   return (
-    <nav className="mx-auto flex w-full max-w-[1600px] items-center justify-between gap-6 border-b-2 border-foreground px-6 py-4">
-      <NavbarHeader />
-      <Quarters />
-      <CurrentQuarter />
+    <nav
+      className="mx-auto flex w-full max-w-[1600px] items-center justify-between gap-6 border-b-2 border-foreground px-6 py-4"
+      aria-label="Game status"
+    >
+      <NavbarHeader asHeading={brandAsHeading} />
+      <Quarters currentQuarter={quarter} totalQuarters={totalQuarters} />
+      <CurrentQuarter quarter={quarter} />
     </nav>
   );
 }
 
-function NavbarHeader() {
+function NavbarHeader({ asHeading }: { asHeading: boolean }) {
+  const Component = asHeading ? "h1" : "div";
+
   return (
-    <h1 className="min-w-fit font-serif text-3xl font-bold tracking-wide text-foreground md:text-4xl">
+    <Component className="min-w-fit font-serif text-2xl font-bold tracking-wide text-foreground sm:text-3xl md:text-4xl">
       KISSATEN{" "}
       <span className="bg-primary/20 px-1 text-primary">TYCOON</span>
-    </h1>
+    </Component>
   );
 }
 
-function Quarters() {
-  const quarters = [1, 2, 3, 4, 5, 6, 7, 8];
+function Quarters({
+  currentQuarter,
+  totalQuarters,
+}: {
+  currentQuarter: number;
+  totalQuarters: number;
+}) {
+  const quarters = Array.from({ length: totalQuarters }, (_, index) => index + 1);
 
   return (
-    <ul className="hidden items-center gap-2 lg:flex" aria-label="Quarter progress">
+    <ul className="hidden items-center gap-2 xl:flex" aria-label="Quarter progress">
       {quarters.map((quarter) => {
-        const isPast = quarter < 3;
-        const isCurrent = quarter === 3;
+        const isPast = quarter < currentQuarter;
+        const isCurrent = quarter === currentQuarter;
 
         return (
           <li
@@ -48,10 +69,10 @@ function Quarters() {
   );
 }
 
-function CurrentQuarter() {
+function CurrentQuarter({ quarter }: { quarter: number }) {
   return (
-    <p className="hidden min-w-fit text-right font-serif text-lg font-semibold text-muted-foreground md:block">
-      Q3 &middot; Summer &mdash; Shimokitazawa, Tokyo
+    <p className="hidden min-w-fit text-right font-serif text-lg font-semibold text-muted-foreground lg:block">
+      Q{quarter} &middot; Summer &mdash; Shimokitazawa, Tokyo
     </p>
   );
 }
