@@ -204,8 +204,8 @@ export default function FinalResults({
         </div>
       </header>
 
-      <div className="mt-6 grid grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[minmax(0,1.7fr)_minmax(320px,0.9fr)] xl:gap-10">
-        <div className="order-2 min-w-0 lg:order-1">
+      <div className="mt-6 grid grid-cols-[minmax(0,1fr)] gap-8 xl:grid-cols-[minmax(0,1.7fr)_minmax(320px,0.9fr)] xl:gap-10">
+        <div className="order-2 min-w-0 xl:order-1">
           <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-8 md:grid-cols-2 md:gap-10">
             <FinancialLedger />
             <BusinessLedger />
@@ -214,7 +214,7 @@ export default function FinalResults({
           <QuarterHistory />
         </div>
 
-        <div className="order-1 lg:order-2">
+        <div className="order-1 min-w-0 xl:order-2">
           <FinalProfessorReview initialState={professorState} />
         </div>
       </div>
@@ -329,7 +329,7 @@ function QuarterHistory() {
       </div>
 
       <div
-        className="mt-4 hidden grid-cols-[120px_minmax(260px,1fr)_105px_95px_115px_24px] gap-3 border-y border-foreground px-3 py-2 font-mono text-xs text-muted-foreground lg:grid"
+        className="mt-4 hidden grid-cols-[105px_minmax(150px,1fr)_92px_82px_105px_20px] gap-2 border-y border-foreground px-3 py-2 font-mono text-xs text-muted-foreground lg:grid"
         aria-hidden="true"
       >
         <span>Quarter / Event</span>
@@ -352,7 +352,7 @@ function QuarterHistory() {
 function QuarterDisclosure({ record }: { record: QuarterRecord }) {
   return (
     <details className="group border-b border-dashed border-border open:bg-secondary/30">
-      <summary className="grid min-h-12 cursor-pointer list-none grid-cols-[minmax(0,1fr)_auto] gap-3 px-3 py-3 outline-none transition-colors hover:bg-secondary/40 focus-visible:ring-3 focus-visible:ring-ring/30 lg:grid-cols-[120px_minmax(260px,1fr)_105px_95px_115px_24px] lg:items-center [&::-webkit-details-marker]:hidden">
+      <summary className="grid min-h-12 cursor-pointer list-none grid-cols-[minmax(0,1fr)_auto] gap-3 px-3 py-3 outline-none transition-colors hover:bg-secondary/40 focus-visible:ring-3 focus-visible:ring-ring/30 lg:grid-cols-[105px_minmax(150px,1fr)_92px_82px_105px_20px] lg:items-center lg:gap-2 [&::-webkit-details-marker]:hidden">
         <span className="flex min-w-0 items-center gap-2 font-mono font-bold">
           {record.turningPoint ? (
             <>

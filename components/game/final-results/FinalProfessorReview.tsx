@@ -74,7 +74,7 @@ export default function FinalProfessorReview({
 
   return (
     <aside
-      className="h-fit rounded-xl border border-primary/30 bg-secondary/30 p-5 lg:sticky lg:top-5 xl:p-6"
+      className="h-fit rounded-xl border border-primary/30 bg-secondary/30 p-5 xl:sticky xl:top-5 xl:p-6"
       aria-labelledby="final-professor-heading"
     >
       <div className="flex items-start justify-between gap-4">
