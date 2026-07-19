@@ -1,12 +1,13 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
-export default function Costs() {
+export default function IncomeStatement() {
   const stats = [
-    ["Bean Cost per kg", "¥2,000"],
-    ["Coffee Bean per cup", "5g"],
-    ["Other Material Cost", "¥60"],
-    ["Rental", "¥600,000"],
+    ["Sale Revenue", "¥2,000,000"],
+    ["Total Cost of Good Sold", "¥200,000"],
+    ["Gross Profit", "¥893,000"],
+    ["Expense", "¥418,000"],
+    ["Debt", "¥198,000"],
   ];
 
   return (
@@ -14,7 +15,7 @@ export default function Costs() {
       <Card className="h-fit rounded-xl border border-border bg-card shadow-none">
         <CardContent className="space-y-6">
           <h2 className="font-mono text-xs font-bold uppercase tracking-[0.24em] text-muted-foreground">
-            Material Cost
+            Income Statement{" "}
           </h2>
           <div className="space-y-3">
             {stats.map(([label, value], index) => (

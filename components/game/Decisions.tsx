@@ -17,8 +17,8 @@ export default function Decisions() {
 
         <DecisionSection label="1 Price per cup" value="¥560">
           <Slider defaultValue={[70]} max={100} step={1} aria-label="Price per cup" />
-          <p className="font-mono text-xs text-muted-foreground">
-            margin ¥212/cup &middot;{" "}
+          <p className="flex items-center whitespace-nowrap font-mono text-xs text-muted-foreground">
+            <span>margin ¥212/cup</span> <Dot />
             <span className="text-primary">¥70 above Marudori</span>
           </p>
         </DecisionSection>

@@ -43,22 +43,6 @@ export default function States() {
         </section>
 
         <section className="space-y-4">
-          <div className="h-14">
-            <svg
-              viewBox="0 0 320 64"
-              role="img"
-              aria-label="Staff morale trend"
-              className="h-full w-full text-primary"
-            >
-              <polyline
-                points="0,45 55,42 110,46 165,36 220,33 275,28 320,25"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="3"
-              />
-            </svg>
-          </div>
-
           <div>
             <p className="font-mono text-xs font-bold uppercase tracking-[0.24em] text-muted-foreground">
               Market share

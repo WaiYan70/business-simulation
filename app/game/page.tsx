@@ -1,6 +1,7 @@
 import Costs from "@/components/game/Costs";
 import Decisions from "@/components/game/Decisions";
 import Events from "@/components/game/Events";
+import IncomeStatement from "@/components/game/IncomeStatement";
 import Stats from "@/components/game/States";
 import Summary from "@/components/game/Summary";
 
@@ -10,6 +11,7 @@ export default function Dashboard() {
       <div className="flex flex-col gap-5">
         <Stats />
         <Costs />
+        <IncomeStatement/>
       </div>
       <div className="flex min-w-0 flex-col gap-5">
         <Events />
