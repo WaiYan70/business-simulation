@@ -12,12 +12,12 @@ export default async function ResultsPage({ searchParams }: ResultsPageProps) {
   const params = await searchParams;
   const parsedQuarter = Number.parseInt(params.quarter ?? "3", 10);
   const quarter = Number.isFinite(parsedQuarter)
-    ? Math.min(Math.max(parsedQuarter, 1), 4)
+    ? Math.min(Math.max(parsedQuarter, 1), 8)
     : 3;
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Navbar quarter={quarter} totalQuarters={4} brandAsHeading={false} />
+      <Navbar quarter={quarter} totalQuarters={8} brandAsHeading={false} />
       <QuarterResults
         quarter={quarter}
         professorState={params.professor ?? "loading"}

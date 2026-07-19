@@ -20,7 +20,7 @@ export default function QuarterResults({
   professorState = "loading",
 }: QuarterResultsProps) {
   const router = useRouter();
-  const isFinalQuarter = quarter >= 4;
+  const isFinalQuarter = quarter >= 8;
 
   return (
     <main className="mx-auto w-full max-w-[1600px] px-4 py-6 sm:px-6 lg:py-8">
@@ -42,7 +42,7 @@ export default function QuarterResults({
           </h1>
           <p className="mt-3 max-w-2xl text-base leading-7 text-muted-foreground">
             {isFinalQuarter
-              ? "Your four-quarter run is complete. Review the final position and the decisions that shaped it."
+              ? "Your eight-quarter run is complete. Review the final position and the decisions that shaped it."
               : "These figures are the saved simulation result. Professor commentary is separate and may arrive after you begin reviewing them."}
           </p>
         </div>
