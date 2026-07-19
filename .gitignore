@@ -42,3 +42,5 @@ next-env.d.ts
 
 skills-lock.json
 /.agents/
+/.codex/
+/.impeccable/
