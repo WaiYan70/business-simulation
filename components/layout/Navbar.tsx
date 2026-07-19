@@ -2,12 +2,14 @@ type NavbarProps = {
   quarter?: number;
   totalQuarters?: number;
   brandAsHeading?: boolean;
+  completed?: boolean;
 };
 
 export default function Navbar({
   quarter = 3,
   totalQuarters = 8,
   brandAsHeading = true,
+  completed = false,
 }: NavbarProps) {
   return (
     <nav
@@ -15,8 +17,12 @@ export default function Navbar({
       aria-label="Game status"
     >
       <NavbarHeader asHeading={brandAsHeading} />
-      <Quarters currentQuarter={quarter} totalQuarters={totalQuarters} />
-      <CurrentQuarter quarter={quarter} />
+      <Quarters
+        currentQuarter={quarter}
+        totalQuarters={totalQuarters}
+        completed={completed}
+      />
+      <CurrentQuarter quarter={quarter} completed={completed} />
     </nav>
   );
 }
@@ -35,17 +41,19 @@ function NavbarHeader({ asHeading }: { asHeading: boolean }) {
 function Quarters({
   currentQuarter,
   totalQuarters,
+  completed,
 }: {
   currentQuarter: number;
   totalQuarters: number;
+  completed: boolean;
 }) {
   const quarters = Array.from({ length: totalQuarters }, (_, index) => index + 1);
 
   return (
     <ul className="hidden items-center gap-2 xl:flex" aria-label="Quarter progress">
       {quarters.map((quarter) => {
-        const isPast = quarter < currentQuarter;
-        const isCurrent = quarter === currentQuarter;
+        const isPast = completed || quarter < currentQuarter;
+        const isCurrent = !completed && quarter === currentQuarter;
 
         return (
           <li
@@ -69,10 +77,17 @@ function Quarters({
   );
 }
 
-function CurrentQuarter({ quarter }: { quarter: number }) {
+function CurrentQuarter({
+  quarter,
+  completed,
+}: {
+  quarter: number;
+  completed: boolean;
+}) {
   return (
     <p className="hidden min-w-fit text-right font-serif text-lg font-semibold text-muted-foreground lg:block">
-      Q{quarter} &middot; Summer &mdash; Shimokitazawa, Tokyo
+      {completed ? "Game complete" : `Q${quarter} · Summer`}
+      {" — Shimokitazawa, Tokyo"}
     </p>
   );
 }

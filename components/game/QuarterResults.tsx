@@ -20,7 +20,6 @@ export default function QuarterResults({
   professorState = "loading",
 }: QuarterResultsProps) {
   const router = useRouter();
-  const isFinalQuarter = quarter >= 8;
 
   return (
     <main className="mx-auto w-full max-w-[1600px] px-4 py-6 sm:px-6 lg:py-8">
@@ -28,7 +27,7 @@ export default function QuarterResults({
         <div>
           <div className="flex flex-wrap items-center gap-3">
             <Badge variant="secondary" className="font-mono">
-              {isFinalQuarter ? "Run complete" : `Quarter ${quarter} closed`}
+              Quarter {quarter} closed
             </Badge>
             <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary">
               <CheckCircle2 className="size-4" aria-hidden="true" />
@@ -36,14 +35,11 @@ export default function QuarterResults({
             </span>
           </div>
           <h1 className="mt-4 max-w-3xl text-wrap-balance font-serif text-3xl font-bold leading-tight sm:text-4xl">
-            {isFinalQuarter
-              ? "The owner’s final ledger"
-              : "A profitable quarter, with pressure behind the numbers"}
+            A profitable quarter, with pressure behind the numbers
           </h1>
           <p className="mt-3 max-w-2xl text-base leading-7 text-muted-foreground">
-            {isFinalQuarter
-              ? "Your eight-quarter run is complete. Review the final position and the decisions that shaped it."
-              : "These figures are the saved simulation result. Professor commentary is separate and may arrive after you begin reviewing them."}
+            These figures are the saved simulation result. Professor commentary
+            is separate and may arrive after you begin reviewing them.
           </p>
         </div>
         <div className="flex shrink-0 items-center gap-3 sm:text-right">
@@ -72,7 +68,7 @@ export default function QuarterResults({
             <div className="grid gap-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
               <div>
                 <h2 id="result-reading-heading" className="font-serif text-2xl font-bold">
-                  {isFinalQuarter ? "Final position" : "What the ledger says"}
+                  What the ledger says
                 </h2>
                 <p className="mt-2 max-w-[70ch] leading-7 text-muted-foreground">
                   Cash changed by {stateSnapshot.cashChange}. The financial result
@@ -91,15 +87,14 @@ export default function QuarterResults({
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="max-w-xl text-sm leading-6 text-muted-foreground">
-              {isFinalQuarter
-                ? "The completed run is saved. Professor commentary is optional context and does not alter this report."
-                : "You can continue now. The Professor panel will update independently when commentary is ready."}
+              You can continue now. The Professor panel will update independently
+              when commentary is ready.
             </p>
             <Button
               className="h-11 w-full sm:w-auto"
-              onClick={() => router.push(isFinalQuarter ? "/" : "/game")}
+              onClick={() => router.push("/game")}
             >
-              {isFinalQuarter ? "Return to game history" : `Plan Quarter ${quarter + 1}`}
+              Plan Quarter {quarter + 1}
               <ArrowRight data-icon="inline-end" aria-hidden="true" />
             </Button>
           </div>
