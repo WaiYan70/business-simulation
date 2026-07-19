@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Slider } from "@/components/ui/slider";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import QuarterCommit from "@/components/game/QuarterCommit";
+import QuarterCommit from "@/components/game/dashboard/QuarterCommit";
 
 export default function Decisions() {
   return (

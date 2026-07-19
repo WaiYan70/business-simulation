@@ -1,6 +1,7 @@
-import Navbar from "@/components/layout/Navbar";
-import QuarterResults from "@/components/game/QuarterResults";
 import { redirect } from "next/navigation";
+
+import QuarterResults from "@/components/game/quarter-results/QuarterResults";
+import GameSessionHeader from "@/components/game/shared/GameSessionHeader";
 
 type ResultsPageProps = {
   searchParams: Promise<{
@@ -23,7 +24,11 @@ export default async function ResultsPage({ searchParams }: ResultsPageProps) {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Navbar quarter={quarter} totalQuarters={8} brandAsHeading={false} />
+      <GameSessionHeader
+        quarter={quarter}
+        totalQuarters={8}
+        brandAsHeading={false}
+      />
       <QuarterResults
         quarter={quarter}
         professorState={params.professor ?? "loading"}

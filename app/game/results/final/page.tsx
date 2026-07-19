@@ -1,5 +1,5 @@
-import FinalResults from "@/components/game/FinalResults";
-import Navbar from "@/components/layout/Navbar";
+import FinalResults from "@/components/game/final-results/FinalResults";
+import GameSessionHeader from "@/components/game/shared/GameSessionHeader";
 
 type FinalResultsPageProps = {
   searchParams: Promise<{
@@ -14,7 +14,7 @@ export default async function FinalResultsPage({
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Navbar
+      <GameSessionHeader
         quarter={8}
         totalQuarters={8}
         brandAsHeading={false}

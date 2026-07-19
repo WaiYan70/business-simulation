@@ -14,7 +14,7 @@ import {
 
 import FinalProfessorReview, {
   type FinalProfessorState,
-} from "@/components/game/FinalProfessorReview";
+} from "@/components/game/final-results/FinalProfessorReview";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 

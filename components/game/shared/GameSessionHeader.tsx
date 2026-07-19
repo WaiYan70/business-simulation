@@ -1,22 +1,22 @@
-type NavbarProps = {
+type GameSessionHeaderProps = {
   quarter?: number;
   totalQuarters?: number;
   brandAsHeading?: boolean;
   completed?: boolean;
 };
 
-export default function Navbar({
+export default function GameSessionHeader({
   quarter = 3,
   totalQuarters = 8,
   brandAsHeading = true,
   completed = false,
-}: NavbarProps) {
+}: GameSessionHeaderProps) {
   return (
     <nav
       className="mx-auto flex w-full max-w-[1600px] items-center justify-between gap-6 border-b-2 border-foreground px-6 py-4"
       aria-label="Game status"
     >
-      <NavbarHeader asHeading={brandAsHeading} />
+      <GameIdentity asHeading={brandAsHeading} />
       <Quarters
         currentQuarter={quarter}
         totalQuarters={totalQuarters}
@@ -27,7 +27,7 @@ export default function Navbar({
   );
 }
 
-function NavbarHeader({ asHeading }: { asHeading: boolean }) {
+function GameIdentity({ asHeading }: { asHeading: boolean }) {
   const Component = asHeading ? "h1" : "div";
 
   return (

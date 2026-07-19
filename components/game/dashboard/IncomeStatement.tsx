@@ -1,13 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-
-export const incomeStatementStats = [
-  ["Sale Revenue", "¥2,000,000"],
-  ["Total Cost of Good Sold", "¥200,000"],
-  ["Gross Profit", "¥893,000"],
-  ["Expense", "¥418,000"],
-  ["Debt", "¥198,000"],
-] as const;
+import { incomeStatementStats } from "@/components/game/shared/sample-data";
 
 export default function IncomeStatement() {
   return (

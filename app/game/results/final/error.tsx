@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { CircleAlert, History, RotateCcw } from "lucide-react";
 
-import Navbar from "@/components/layout/Navbar";
+import GameSessionHeader from "@/components/game/shared/GameSessionHeader";
 import { Button } from "@/components/ui/button";
 
 export default function FinalResultsError({ reset }: { reset: () => void }) {
@@ -11,7 +11,7 @@ export default function FinalResultsError({ reset }: { reset: () => void }) {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Navbar
+      <GameSessionHeader
         quarter={8}
         totalQuarters={8}
         brandAsHeading={false}

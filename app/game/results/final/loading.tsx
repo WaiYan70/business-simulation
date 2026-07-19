@@ -1,9 +1,9 @@
-import Navbar from "@/components/layout/Navbar";
+import GameSessionHeader from "@/components/game/shared/GameSessionHeader";
 
 export default function FinalResultsLoading() {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Navbar
+      <GameSessionHeader
         quarter={8}
         totalQuarters={8}
         brandAsHeading={false}

@@ -3,9 +3,12 @@
 import { useRouter } from "next/navigation";
 import { ArrowRight, CheckCircle2, ReceiptText } from "lucide-react";
 
-import { incomeStatementStats } from "@/components/game/IncomeStatement";
-import ProfessorDebrief from "@/components/game/ProfessorDebrief";
-import { stateSnapshot, stateStats } from "@/components/game/States";
+import ProfessorDebrief from "@/components/game/quarter-results/ProfessorDebrief";
+import {
+  incomeStatementStats,
+  stateSnapshot,
+  stateStats,
+} from "@/components/game/shared/sample-data";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";

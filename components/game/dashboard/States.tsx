@@ -2,19 +2,10 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-
-export const stateSnapshot = {
-  cashOnHand: "¥5,840,000",
-  cashChange: "+¥620,000 last quarter",
-  marketShare: 42,
-} as const;
-
-export const stateStats = [
-  ["Net profit (Q2)", "¥620,000"],
-  ["Loyal customers", "923 ▲"],
-  ["Demand", "1000"],
-  ["Staff morale", "48 / 100"],
-] as const;
+import {
+  stateSnapshot,
+  stateStats,
+} from "@/components/game/shared/sample-data";
 
 export default function States() {
   return (
