@@ -5,9 +5,9 @@ import { Separator } from "@/components/ui/separator";
 
 export default function States() {
   const stats = [
-    ["Net profit (Q2)", "&yen;620,000"],
+    ["Net profit (Q2)", "¥620,000"],
     ["Loyal customers", "923 ▲"],
-    ["Reputation", "61 / 100"],
+    ["Demand", "1000"],
     ["Staff morale", "48 / 100"],
   ];
 
@@ -19,10 +19,10 @@ export default function States() {
             Cash on hand
           </p>
           <p className="mt-5 font-mono text-5xl font-bold tracking-tight text-primary">
-            &yen;5,840,000
+            ¥5,840,000
           </p>
           <p className="mt-1 font-mono text-sm font-semibold text-primary">
-            ▲ +&yen;620,000 last quarter
+            ▲ +¥620,000 last quarter
           </p>
         </section>
 
@@ -33,8 +33,9 @@ export default function States() {
                 <span className="text-muted-foreground">{label}</span>
                 <span
                   className="font-mono font-bold text-foreground"
-                  dangerouslySetInnerHTML={{ __html: value }}
-                />
+                >
+                  {value}
+                </span>
               </div>
               <Separator className="mt-3 border-t border-dashed border-border bg-transparent" />
             </div>

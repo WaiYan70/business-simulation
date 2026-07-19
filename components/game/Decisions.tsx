@@ -1,4 +1,4 @@
-import { Minus, Plus } from "lucide-react";
+import { Dot, Minus, Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -15,22 +15,22 @@ export default function Decisions() {
           Q3 Decisions
         </h2>
 
-        <DecisionSection label="1 Price per cup" value="&yen;560">
+        <DecisionSection label="1 Price per cup" value="¥560">
           <Slider defaultValue={[70]} max={100} step={1} aria-label="Price per cup" />
           <p className="font-mono text-xs text-muted-foreground">
-            margin &yen;212/cup &middot;{" "}
-            <span className="text-primary">&yen;70 above Marudori</span>
+            margin ¥212/cup &middot;{" "}
+            <span className="text-primary">¥70 above Marudori</span>
           </p>
         </DecisionSection>
 
-        <DecisionSection label="2 Marketing" value="&yen;800,000">
+        <DecisionSection label="2 Marketing" value="¥800,000">
           <Slider defaultValue={[42]} max={100} step={1} aria-label="Marketing" />
           <p className="font-mono text-xs text-muted-foreground">
-            est. reach factor x1.19 (diminishing above &yen;1.2M)
+            est. reach factor x1.19 (diminishing above ¥1.2M)
           </p>
         </DecisionSection>
 
-        <DecisionSection label="3 Staff" value="4 x &yen;900k">
+        <DecisionSection label="3 Staff" value="4 x ¥900k">
           <div className="flex items-center gap-4">
             <Button variant="outline" size="icon" aria-label="Decrease staff">
               <Minus />
@@ -40,63 +40,13 @@ export default function Decisions() {
               <Plus />
             </Button>
           </div>
-          <p className="font-mono text-xs text-muted-foreground">
-            capacity 5,600 cups &middot;{" "}
+          <p className="flex items-center whitespace-nowrap font-mono text-xs text-muted-foreground">
+            <span>capacity 5,600 cups</span> <Dot />
             <span className="text-primary">morale low - consider wage bump</span>
           </p>
         </DecisionSection>
 
-        <DecisionSection label="4 Bean purchasing">
-          <ToggleGroup
-            defaultValue={["forward"]}
-            className="grid w-full grid-cols-2 gap-2"
-            aria-label="Bean purchasing"
-          >
-            <ToggleGroupItem
-              value="spot"
-              className="h-16 w-full flex-col rounded-lg border border-border bg-background text-foreground"
-            >
-              <span className="font-semibold">Spot</span>
-              <span className="font-mono text-xs text-muted-foreground">
-                &yen;2,170/kg now
-              </span>
-            </ToggleGroupItem>
-            <ToggleGroupItem
-              value="forward"
-              className="h-16 w-full flex-col rounded-lg border border-border data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
-            >
-              <span className="font-semibold">Forward</span>
-              <span className="font-mono text-xs opacity-80">
-                &yen;1,930/kg &middot; 2 qtrs
-              </span>
-            </ToggleGroupItem>
-          </ToggleGroup>
-        </DecisionSection>
-
-        <DecisionSection label="5 Quality tier">
-          <ToggleGroup
-            defaultValue={["premium"]}
-            className="grid w-full grid-cols-3 gap-2"
-            aria-label="Quality tier"
-          >
-            {[
-              ["standard", "Standard", "x1.0"],
-              ["premium", "Premium", "x1.4"],
-              ["ultra", "Ultra", "x2.0"],
-            ].map(([value, label, cost]) => (
-              <ToggleGroupItem
-                key={value}
-                value={value}
-                className="h-16 w-full flex-col rounded-lg border border-border data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
-              >
-                <span className="font-semibold">{label}</span>
-                <span className="font-mono text-xs opacity-80">{cost}</span>
-              </ToggleGroupItem>
-            ))}
-          </ToggleGroup>
-        </DecisionSection>
-
-        <DecisionSection label="6 Big move" value="one or none">
+        <DecisionSection label="4 Big move" value="one or none">
           <ToggleGroup
             defaultValue={["loyalty"]}
             className="grid w-full grid-cols-2 gap-2"
@@ -158,8 +108,10 @@ function DecisionSection({
         {value ? (
           <span
             className="font-mono text-base font-bold text-primary"
-            dangerouslySetInnerHTML={{ __html: value }}
-          />
+          >
+            {value}
+          </span>
+
         ) : null}
       </div>
       {children}
