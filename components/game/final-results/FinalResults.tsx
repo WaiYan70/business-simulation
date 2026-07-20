@@ -17,6 +17,7 @@ import FinalProfessorReview, {
 } from "@/components/game/final-results/FinalProfessorReview";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { useGameFlowStore } from "@/lib/stores/game-flow-store";
 
 type FinalResultsProps = {
   professorState?: Exclude<FinalProfessorState, "ready">;
@@ -158,6 +159,12 @@ export default function FinalResults({
   professorState = "loading",
 }: FinalResultsProps) {
   const router = useRouter();
+  const resetGame = useGameFlowStore((state) => state.resetGame);
+
+  function playAgain() {
+    resetGame();
+    router.push("/game");
+  }
 
   return (
     <main className="mx-auto w-full max-w-[1600px] px-4 py-6 sm:px-6 lg:py-8">
@@ -240,7 +247,7 @@ export default function FinalResults({
             <History data-icon="inline-start" aria-hidden="true" />
             View game history
           </Button>
-          <Button className="h-11 px-6" onClick={() => router.push("/game")}>
+          <Button className="h-11 px-6" onClick={playAgain}>
             <RotateCcw data-icon="inline-start" aria-hidden="true" />
             Play again
             <ArrowRight data-icon="inline-end" aria-hidden="true" />

@@ -12,6 +12,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { useGameFlowStore } from "@/lib/stores/game-flow-store";
 
 type QuarterResultsProps = {
   quarter: number;
@@ -23,6 +24,14 @@ export default function QuarterResults({
   professorState = "loading",
 }: QuarterResultsProps) {
   const router = useRouter();
+  const continueToNextQuarter = useGameFlowStore(
+    (state) => state.continueToNextQuarter,
+  );
+
+  function planNextQuarter() {
+    continueToNextQuarter();
+    router.push("/game");
+  }
 
   return (
     <main className="mx-auto w-full max-w-[1600px] px-4 py-6 sm:px-6 lg:py-8">
@@ -95,7 +104,7 @@ export default function QuarterResults({
             </p>
             <Button
               className="h-11 w-full sm:w-auto"
-              onClick={() => router.push("/game")}
+              onClick={planNextQuarter}
             >
               Plan Quarter {quarter + 1}
               <ArrowRight data-icon="inline-end" aria-hidden="true" />
