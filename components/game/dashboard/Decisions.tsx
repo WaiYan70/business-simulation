@@ -8,12 +8,12 @@ import { Slider } from "@/components/ui/slider";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import QuarterCommit from "@/components/game/dashboard/QuarterCommit";
 
-export default function Decisions() {
+export default function Decisions({ quarter }: { quarter: number }) {
   return (
     <Card className="h-fit rounded-xl border border-border bg-card shadow-none">
       <CardContent className="space-y-5">
         <h2 className="font-mono text-xs font-bold uppercase tracking-[0.24em] text-muted-foreground">
-          Q3 Decisions
+          Q{quarter} Decisions
         </h2>
 
         <DecisionSection label="1 Price per cup" value="¥560">
@@ -75,7 +75,7 @@ export default function Decisions() {
           </ToggleGroup>
         </DecisionSection>
 
-        <QuarterCommit quarter={3} />
+        <QuarterCommit quarter={quarter} />
       </CardContent>
     </Card>
   );

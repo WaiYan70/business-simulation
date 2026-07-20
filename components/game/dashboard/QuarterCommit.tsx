@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { CircleAlert, LoaderCircle, RotateCcw } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { TOTAL_QUARTERS, useGameFlowStore } from "@/lib/stores/game-flow-store";
 
 type CommitStatus = "idle" | "processing" | "slow" | "error";
 
@@ -13,6 +14,9 @@ const wait = (duration: number) =>
 
 export default function QuarterCommit({ quarter }: { quarter: number }) {
   const router = useRouter();
+  const completeCurrentQuarter = useGameFlowStore(
+    (state) => state.completeCurrentQuarter,
+  );
   const slowTimer = useRef<number | null>(null);
   const [status, setStatus] = useState<CommitStatus>("idle");
 
@@ -29,7 +33,10 @@ export default function QuarterCommit({ quarter }: { quarter: number }) {
 
       // Static vertical slice: the real use case will replace this delay.
       await wait(900);
-      router.push(`/game/results?quarter=${quarter}`);
+      completeCurrentQuarter();
+      router.push(
+        quarter === TOTAL_QUARTERS ? "/game/results/final" : "/game/results",
+      );
     } catch {
       if (slowTimer.current) window.clearTimeout(slowTimer.current);
       setStatus("error");
