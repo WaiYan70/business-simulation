@@ -7,7 +7,7 @@ export type QuarterNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 export type GameStatus = "active" | "completed";
 export type BigMove =
   | "staff training"
-  | "loyalty program"
+  | "loyalty-program"
   | "renovate"
   | "none";
 
@@ -29,7 +29,7 @@ export type BussinessState = {
 export type QuarterOutcome = {
   headline: string;
   revenue: number;
-  costOfGoodSold: number;
+  costOfGoodsSold: number;
   operatingExpenses: number;
   profit: number;
   demand: number;
@@ -166,4 +166,14 @@ export function materializeQuarterRecord(
     scenario,
     outcome: scenario.outcome,
   };
+}
+
+export function getQuarterRecord(session: GameSession, quarter: QuarterNumber): QuarterRecord | undefined {
+  const committed = session.records.find((record) => record.quarter === quarter);
+  return committed ? materializeQuarterRecord(committed) : undefined;
+ }
+
+export function getLatestQuarterRecord(session: GameSession): QuarterRecord | undefined {
+  const committed = session.records[session.records.length - 1];
+  return committed ? materializeQuarterRecord(committed) : undefined
 }
