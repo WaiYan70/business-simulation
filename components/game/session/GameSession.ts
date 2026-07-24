@@ -168,12 +168,38 @@ export function materializeQuarterRecord(
   };
 }
 
-export function getQuarterRecord(session: GameSession, quarter: QuarterNumber): QuarterRecord | undefined {
-  const committed = session.records.find((record) => record.quarter === quarter);
+export function getQuarterRecord(
+  session: GameSession,
+  quarter: QuarterNumber,
+): QuarterRecord | undefined {
+  const committed = session.records.find(
+    (record) => record.quarter === quarter,
+  );
   return committed ? materializeQuarterRecord(committed) : undefined;
- }
+}
 
-export function getLatestQuarterRecord(session: GameSession): QuarterRecord | undefined {
+export function getLatestQuarterRecord(
+  session: GameSession,
+): QuarterRecord | undefined {
   const committed = session.records[session.records.length - 1];
-  return committed ? materializeQuarterRecord(committed) : undefined
+  return committed ? materializeQuarterRecord(committed) : undefined;
+}
+
+export function getCurrentBusinessState(session: GameSession): BussinessState {
+  return (
+    getLatestQuarterRecord(session)?.outcome.stateAfter ??
+    INITIAL_BUSINESS_STATE
+  );
+}
+
+export function getCumulativeTotals(session: GameSession) {
+  return session.records.reduce(
+    (totals, committed) => {
+      const outcome = getScenario(committed.quarter).outcome;
+      totals.revenue += outcome.revenue;
+      totals.profit += outcome.profit;
+      totals.lostSales += outcome.lostSales;
+      return totals
+    }, {revenue: 0, profit: 0, lostSales: 0}
+  )
 }
