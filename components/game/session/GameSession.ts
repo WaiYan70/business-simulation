@@ -199,7 +199,84 @@ export function getCumulativeTotals(session: GameSession) {
       totals.revenue += outcome.revenue;
       totals.profit += outcome.profit;
       totals.lostSales += outcome.lostSales;
-      return totals
-    }, {revenue: 0, profit: 0, lostSales: 0}
-  )
+      return totals;
+    },
+    { revenue: 0, profit: 0, lostSales: 0 },
+  );
+}
+
+export function parseQuarter(value: string | undefined): QuarterNumber | null {
+  const parsed = Number(value);
+  return Number.isInteger(parsed) && parsed >= 1 && parsed <= TOTAL_QUARTERS
+    ? (parsed as QuarterNumber)
+    : null;
+}
+
+export function formatYen(value: number): string {
+  return `¥${value.toLocaleString("en-US")}`;
+}
+
+export function formatDecisionSummary(decision: PlayerDecision): string {
+  const bigMove =
+    decision.bigMove === "none"
+      ? ""
+      : ` . ${decision.bigMove.replaceAll("-", " ")}`;
+  return `${formatYen(decision.price)} cup · ${formatYen(decision.marketing)} marketing  · ${decision.staff} staff  · ${bigMove} `;
+}
+
+function clampToStep(value: number, minimum: number, maximum: number: step: number): number{
+  const finite = Number.isFinite(value) ? value : minimum
+  const clamped = Math.min(Math.max(finite, minimum), maximum)
+  return Math.round(clamped / step) * step
+}
+
+function normalizeDecision(decision: PlayerDecision): PlayerDecision{
+  return {
+    price: clampToStep(decision.price, 400, 800, 10),
+    marketing: clampToStep(decision.marketing, 0, 1_500_000, 50_000),
+    staff: clampToStep(decision.staff, 2, 1000, 1),
+    bigMove: ["staff-training", "loyalty-program", "renovate", "none"].includes(decision.bigMove)? decision.bigMove : "none",
+  }
+}
+
+export function isGameSession(value: unknown): value is GameSession {
+  if (!value || typeof value !== "object") return false;
+
+  const session = value as Partial<GameSession>;
+
+  if (
+    session.schemaVersion !== GAME_SESSION_SCHEMA_VERSION ||
+    typeof session.id !== "string" ||
+    !Number.isInteger(session.version) ||
+    !Array.isArray(session.records) ||
+    !session.draftDecision ||
+    (session.status !== "active" && session.status !== "completed")
+  ) {
+    return false;
+  }
+
+  const currentQuarter = session.currentQuarter;
+
+  if (
+    typeof currentQuarter !== "number" ||
+    currentQuarter < 1 ||
+    currentQuarter > TOTAL_QUARTERS
+  ) {
+    return false;
+  }
+
+  const sequential = session.records.every(
+    (record, index) =>
+      record?.quarter === index + 1 &&
+      typeof record.committedAt === "string" &&
+      record.decision !== undefined,
+  );
+
+  if (!sequential || session.version !== session.records.length) {
+    return false;
+  }
+
+  return session.status === "completed"
+    ? session.records.length === TOTAL_QUARTERS && currentQuarter === 8
+    : session.records.length === currentQuarter - 1;
 }
