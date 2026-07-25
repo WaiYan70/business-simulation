@@ -224,7 +224,7 @@ export function formatDecisionSummary(decision: PlayerDecision): string {
   return `${formatYen(decision.price)} cup · ${formatYen(decision.marketing)} marketing  · ${decision.staff} staff  · ${bigMove} `;
 }
 
-function clampToStep(value: number, minimum: number, maximum: number: step: number): number{
+function clampToStep(value: number, minimum: number, maximum: number, step: number): number{
   const finite = Number.isFinite(value) ? value : minimum
   const clamped = Math.min(Math.max(finite, minimum), maximum)
   return Math.round(clamped / step) * step
