@@ -6,7 +6,7 @@ export const GAME_SESSION_SCHEMA_VERSION = 1;
 export type QuarterNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 export type GameStatus = "active" | "completed";
 export type BigMove =
-  | "staff training"
+  | "staff-training"
   | "loyalty-program"
   | "renovate"
   | "none";
@@ -108,10 +108,10 @@ export function updateGameDecision(
   if (session.status !== "active") return session;
   return {
     ...session,
-    draftDecision: {
+    draftDecision: normalizeDecision({
       ...session.draftDecision,
       ...patch,
-    },
+    }),
     updateAt: now,
   };
 }

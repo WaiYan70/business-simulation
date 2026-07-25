@@ -1,5 +1,4 @@
-import Dashboard from "./game/page";
-
+import { redirect } from "next/navigation";
 export default function Home() {
-  return <Dashboard />;
+  redirect("/game");
 }

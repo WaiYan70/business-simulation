@@ -1,5 +1,7 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import Costs from "@/components/game/dashboard/Costs";
 import Decisions from "@/components/game/dashboard/Decisions";
 import Events from "@/components/game/dashboard/Events";
@@ -7,25 +9,51 @@ import IncomeStatement from "@/components/game/dashboard/IncomeStatement";
 import Stats from "@/components/game/dashboard/States";
 import Summary from "@/components/game/dashboard/Summary";
 import GameSessionHeader from "@/components/game/shared/GameSessionHeader";
-import { TOTAL_QUARTERS, useGameFlowStore } from "@/lib/stores/game-flow-store";
+import { useGameSessionStore } from "@/lib/stores/game-session-store";
+import GameSessionLoading from "./loading";
+import {
+  getCurrentBusinessState,
+  getLatestQuarterRecord,
+  getScenario,
+  TOTAL_QUARTERS,
+} from "@/components/game/session/GameSession";
 
 export default function Dashboard() {
-  const quarter = useGameFlowStore((state) => state.currentQuarter);
+  const router = useRouter();
+  const session = useGameSessionStore((state) => state.session);
+  const hydrated = useGameSessionStore((state) => state.hydrated);
+
+  useEffect(() => {
+    if (hydrated && session?.status === "completed") {
+      router.replace("/game/results/final");
+    }
+  }, [hydrated, router, session?.status]);
+
+  if (!hydrated || !session || session.status === "completed") {
+    return <GameSessionLoading label="Opening saved game" />;
+  }
+
+  const scanario = getScenario(session.currentQuarter);
+  const state = getCurrentBusinessState(session);
+  const previousRecord = getLatestQuarterRecord(session);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <GameSessionHeader quarter={quarter} totalQuarters={TOTAL_QUARTERS} />
+      <GameSessionHeader
+        quarter={session.currentQuarter}
+        totalQuarters={TOTAL_QUARTERS}
+      />
       <main className="mx-auto grid w-full max-w-[1600px] gap-5 px-6 py-5 xl:grid-cols-[360px_minmax(0,1fr)_420px]">
         <div className="flex flex-col gap-5">
-          <Stats />
+          <Stats state={state} previousRecord={previousRecord} />
           <Costs />
-          <IncomeStatement />
+          <IncomeStatement record={previousRecord} />
         </div>
         <div className="flex min-w-0 flex-col gap-5">
-          <Events />
-          <Summary />
+          <Events scanario={scanario} />
+          <Summary record={previousRecord} />
         </div>
-        <Decisions quarter={quarter} />
+        <Decisions />
       </main>
     </div>
   );

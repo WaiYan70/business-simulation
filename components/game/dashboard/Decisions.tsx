@@ -7,67 +7,147 @@ import { Separator } from "@/components/ui/separator";
 import { Slider } from "@/components/ui/slider";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import QuarterCommit from "@/components/game/dashboard/QuarterCommit";
+import { useGameSessionStore } from "@/lib/stores/game-session-store";
+import { BigMove, formatYen } from "../session/GameSession";
 
-export default function Decisions({ quarter }: { quarter: number }) {
+const bigMoveOptions: Array<{
+  value: BigMove;
+  label: string;
+  cost: string;
+}> = [
+  {
+    value: "staff-training",
+    label: "2nd location",
+    cost: "¥8,000,000",
+  },
+  {
+    value: "loyalty-program",
+    label: "Loyalty program",
+    cost: "¥1,500,000",
+  },
+  {
+    value: "renovate",
+    label: "Renovate",
+    cost: "¥2,000,000",
+  },
+  {
+    value: "none",
+    label: "None",
+    cost: "Hold cash",
+  },
+];
+
+export default function Decisions() {
+  const session = useGameSessionStore((state) => state.session);
+  const updateDecision = useGameSessionStore((state) => state.updateDecision);
+  const persistenceError = useGameSessionStore(
+    (state) => state.persistenceError,
+  );
+
+  if (!session || session.status !== "active") return null;
+
+  const decision = session.draftDecision;
+
   return (
     <Card className="h-fit rounded-xl border border-border bg-card shadow-none">
       <CardContent className="space-y-5">
         <h2 className="font-mono text-xs font-bold uppercase tracking-[0.24em] text-muted-foreground">
-          Q{quarter} Decisions
+          Q{session.currentQuarter} Decisions
         </h2>
 
-        <DecisionSection label="1 Price per cup" value="¥560">
-          <Slider defaultValue={[70]} max={100} step={1} aria-label="Price per cup" />
+        <DecisionSection
+          label="1 Price per cup"
+          value={formatYen(decision.price)}
+        >
+          <Slider
+            value={[decision.price]}
+            min={400}
+            max={800}
+            step={10}
+            aria-label="Price per cup"
+            onValueChange={(value) => {
+              updateDecision({ price: value[0] });
+            }}
+          />
           <p className="flex items-center whitespace-nowrap font-mono text-xs text-muted-foreground">
             <span>margin ¥212/cup</span> <Dot />
             <span className="text-primary">¥70 above Marudori</span>
           </p>
         </DecisionSection>
 
-        <DecisionSection label="2 Marketing" value="¥800,000">
-          <Slider defaultValue={[42]} max={100} step={1} aria-label="Marketing" />
+        <DecisionSection
+          label="2 Marketing"
+          value={formatYen(decision.marketing)}
+        >
+          <Slider
+            value={[decision.marketing]}
+            min={0}
+            max={1_500_000}
+            step={50_000}
+            aria-label="Marketing budget"
+            onValueChange={(value) => {
+              updateDecision({ marketing: value[0] });
+            }}
+          />
           <p className="font-mono text-xs text-muted-foreground">
             est. reach factor x1.19 (diminishing above ¥1.2M)
           </p>
         </DecisionSection>
 
-        <DecisionSection label="3 Staff" value="4 x ¥900k">
+        <DecisionSection label="3 Staff" value={`${decision.staff} staff`}>
           <div className="flex items-center gap-4">
-            <Button variant="outline" size="icon" aria-label="Decrease staff">
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              disabled={decision.staff <= 2}
+              aria-label="Decrease staff"
+              onClick={() => updateDecision({ staff: decision.staff - 1 })}
+            >
               <Minus />
             </Button>
-            <p className="font-mono text-xl font-bold text-foreground">4 staff</p>
-            <Button variant="outline" size="icon" aria-label="Increase staff">
+            <p className="font-mono text-xl font-bold text-foreground">
+              {decision.staff} staff
+            </p>
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              disabled={decision.staff >= 8}
+              aria-label="Increase staff"
+              onClick={() => updateDecision({ staff: decision.staff + 1 })}
+            >
               <Plus />
             </Button>
           </div>
           <p className="flex items-center whitespace-nowrap font-mono text-xs text-muted-foreground">
             <span>capacity 5,600 cups</span> <Dot />
-            <span className="text-primary">morale low - consider wage bump</span>
+            <span className="text-primary">
+              morale low - consider wage bump
+            </span>
           </p>
         </DecisionSection>
 
-        <DecisionSection label="4 Big move" value="one or none">
+        <DecisionSection label="5 Big move" value="One or none">
           <ToggleGroup
-            defaultValue={["loyalty"]}
+            value={[decision.bigMove]}
             className="grid w-full grid-cols-2 gap-2"
             aria-label="Big move"
+            onValueChange={(values) => {
+              const bigMove = values[0] as BigMove | undefined;
+              if (bigMove) updateDecision({ bigMove });
+            }}
           >
-            {[
-              ["location", "2nd location", "\u00a58,000,000"],
-              ["loyalty", "Loyalty program", "\u00a51,500,000"],
-              ["renovate", "Renovate", "\u00a52,000,000"],
-              ["none", "None", "hold cash"],
-            ].map(([value, label, cost]) => (
+            {bigMoveOptions.map((option) => (
               <ToggleGroupItem
-                key={value}
-                value={value}
+                key={option.value}
+                value={option.value}
                 className="h-16 w-full items-start rounded-lg border border-border p-3 text-left data-[state=on]:border-primary data-[state=on]:bg-primary/10"
               >
                 <span className="flex flex-col items-start">
-                  <span className="font-semibold">{label}</span>
+                  <span className="font-semibold">{option.label}</span>
                   <span className="font-mono text-xs text-muted-foreground">
-                    {cost}
+                    {option.cost}
                   </span>
                 </span>
               </ToggleGroupItem>
@@ -75,7 +155,16 @@ export default function Decisions({ quarter }: { quarter: number }) {
           </ToggleGroup>
         </DecisionSection>
 
-        <QuarterCommit quarter={quarter} />
+        {persistenceError ? (
+          <p
+            className="rounded-lg border border-destructive/40 bg-destructive/5 p-3 text-sm text-destructive"
+            role="alert"
+          >
+            {persistenceError}
+          </p>
+        ) : null}
+
+        <QuarterCommit quarter={session.currentQuarter} />
       </CardContent>
     </Card>
   );
@@ -93,14 +182,11 @@ function DecisionSection({
   return (
     <section className="space-y-3">
       <div className="flex items-center justify-between gap-4">
-        <Label className="text-base font-bold text-foreground">{label}</Label>
+        <Label className="text-base font-bold">{label}</Label>
         {value ? (
-          <span
-            className="font-mono text-base font-bold text-primary"
-          >
+          <span className="font-mono font-bold text-primary">
             {value}
           </span>
-
         ) : null}
       </div>
       {children}
