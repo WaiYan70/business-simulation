@@ -1,9 +1,9 @@
-import FinalResults from "@/components/game/final-results/FinalResults";
-import GameSessionHeader from "@/components/game/shared/GameSessionHeader";
+import FinalResultScreen from "@/components/game/final-results/FinalResultScreen";
+import { ProfessorState } from "@/components/game/session/GameSession";
 
 type FinalResultsPageProps = {
   searchParams: Promise<{
-    professor?: "loading" | "slow" | "error" | "fallback";
+    professor?: ProfessorState;
   }>;
 };
 
@@ -13,14 +13,6 @@ export default async function FinalResultsPage({
   const params = await searchParams;
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <GameSessionHeader
-        quarter={8}
-        totalQuarters={8}
-        brandAsHeading={false}
-        completed
-      />
-      <FinalResults professorState={params.professor ?? "loading"} />
-    </div>
+    <FinalResultScreen professorState={params.professor ?? "loading"} />
   );
 }
