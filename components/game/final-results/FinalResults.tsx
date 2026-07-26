@@ -15,7 +15,7 @@ import {
 import FinalProfessorReview, {
   type FinalProfessorState,
 } from "@/components/game/final-results/FinalProfessorReview";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useGameFlowStore } from "@/lib/stores/game-flow-store";
 import {
@@ -27,6 +27,8 @@ import {
   materializeQuarterRecord,
   QuarterRecord,
 } from "../session/GameSession";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 type FinalResultsProps = {
   session: GameSession;
@@ -111,17 +113,71 @@ export default function FinalResults({
     },
   ];
 
-  function playAgain() {
-    resetGame();
-    router.push("/game");
-  }
+  const businessCondition: BusinessConditionItem[] = [
+    {
+      label: "Loyalty",
+      start: INITIAL_BUSINESS_STATE.loyalty.toLocaleString(),
+      end: finalState.loyalty.toLocaleString(),
+      direction: getTrendDirection(
+        INITIAL_BUSINESS_STATE.loyalty,
+        finalState.loyalty,
+      ),
+    },
+    {
+      label: "Staff morale",
+      start: INITIAL_BUSINESS_STATE.morale.toString(),
+      end: finalState.morale.toString(),
+      direction: getTrendDirection(
+        INITIAL_BUSINESS_STATE.morale,
+        finalState.morale,
+      ),
+    },
+    {
+      label: "Market share",
+      start: `${INITIAL_BUSINESS_STATE.marketShare}%`,
+      end: `${finalState.marketShare}%`,
+      direction: getTrendDirection(
+        INITIAL_BUSINESS_STATE.marketShare,
+        finalState.marketShare,
+      ),
+    },
+    {
+      label: "Debt",
+      start: formatYen(INITIAL_BUSINESS_STATE.debt),
+      end: formatYen(finalState.debt),
+      direction: getTrendDirection(
+        INITIAL_BUSINESS_STATE.debt,
+        finalState.debt,
+      ),
+    },
+    {
+      label: "Quarterly capacity",
+      start: firstRecord
+        ? `${firstRecord.outcome.capacity.toLocaleString()} cups`
+        : "Not available",
+      end: finalRecord
+        ? `${finalRecord.outcome.capacity.toLocaleString()} cups`
+        : "Not available",
+      direction:
+        firstRecord && finalRecord
+          ? getTrendDirection(
+              firstRecord.outcome.capacity,
+              finalRecord.outcome.capacity,
+            )
+          : "flat",
+    },
+  ];
+
+  const quarterRecords: QuarterHistoryRecord[] = materializedRecords.map(
+    toQuarterHistoryRecord,
+  );
 
   return (
     <main className="mx-auto w-full max-w-[1600px] px-4 py-6 sm:px-6 lg:py-8">
       <header className="border-b border-border pb-7">
         <div className="flex items-center gap-2 text-sm font-medium text-primary">
           <CheckCircle2 className="size-4" aria-hidden="true" />
-          <span>Run complete · 8 quarters</span>
+          <span>Run complete · {session.records.length} quarters</span>
         </div>
 
         <div className="mt-4 grid gap-6 xl:grid-cols-[minmax(0,1fr)_auto] xl:items-end">
@@ -147,7 +203,7 @@ export default function FinalResults({
                   Closing cash
                 </dt>
                 <dd className="mt-1 font-mono text-2xl font-bold tabular-nums text-primary sm:text-3xl">
-                  ¥8,460,000
+                  {formatYen(finalState.cash)}
                 </dd>
               </div>
             </div>
@@ -161,7 +217,7 @@ export default function FinalResults({
                   Cumulative profit
                 </dt>
                 <dd className="mt-1 font-mono text-2xl font-bold tabular-nums text-primary sm:text-3xl">
-                  ¥3,240,000
+                  {formatYen(totals.profit)}
                 </dd>
               </div>
             </div>
@@ -172,11 +228,11 @@ export default function FinalResults({
       <div className="mt-6 grid grid-cols-[minmax(0,1fr)] gap-8 xl:grid-cols-[minmax(0,1.7fr)_minmax(320px,0.9fr)] xl:gap-10">
         <div className="order-2 min-w-0 xl:order-1">
           <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-8 md:grid-cols-2 md:gap-10">
-            <FinancialLedger />
-            <BusinessLedger />
+            <FinancialLedger items={financialPosition} />
+            <BusinessLedger items={businessCondition} />
           </div>
 
-          <QuarterHistory />
+          <QuarterHistory records={quarterRecords} />
         </div>
 
         <div className="order-1 min-w-0 xl:order-2">
@@ -194,21 +250,24 @@ export default function FinalResults({
               This completed run is saved in your game history.
             </p>
             <p className="mt-1 text-sm leading-6 text-muted-foreground">
-              Review any quarter above, or start a new run with what you
-              learned.
+              Refresh to keep reviewing the ledger, inspect an earlier quarter,
+              or begin a new eight-quarter run.
             </p>
           </div>
         </div>
         <div className="flex flex-col gap-3 sm:flex-row">
-          <Button
-            variant="outline"
-            className="h-11 px-5"
-            onClick={() => router.push("/")}
+          <Link
+            href="/game/results?quarter=1"
+            className={cn(buttonVariants({ variant: "outline" }), "h-11 px-5")}
           >
+            <History data-icon="inline-start" aria-hidden="true" />
+            Review from Q1
+          </Link>
+          <Button variant="outline" className="h-11 px-5" onClick={onPlayAgain}>
             <History data-icon="inline-start" aria-hidden="true" />
             View game history
           </Button>
-          <Button className="h-11 px-6" onClick={playAgain}>
+          <Button className="h-11 px-6" onClick={onPlayAgain}>
             <RotateCcw data-icon="inline-start" aria-hidden="true" />
             Play again
             <ArrowRight data-icon="inline-end" aria-hidden="true" />
@@ -359,30 +418,14 @@ function QuarterDisclosure({ record }: { record: QuarterHistoryRecord }) {
         </span>
 
         <span className="col-span-2 grid grid-cols-3 gap-3 lg:contents">
-          <span>
-            <span className="block font-mono text-xs text-muted-foreground lg:hidden">
-              Revenue
-            </span>
-            <span className="mt-1 block text-right font-mono text-sm font-bold tabular-nums lg:mt-0">
-              {record.revenue}
-            </span>
-          </span>
-          <span>
-            <span className="block font-mono text-xs text-muted-foreground lg:hidden">
-              Profit
-            </span>
-            <span className="mt-1 block text-right font-mono text-sm font-bold tabular-nums lg:mt-0">
-              {record.profit}
-            </span>
-          </span>
-          <span>
-            <span className="block font-mono text-xs text-muted-foreground lg:hidden">
-              Cash
-            </span>
-            <span className="mt-1 block text-right font-mono text-sm font-bold tabular-nums lg:mt-0">
-              {record.endingCash}
-            </span>
-          </span>
+          {/* Revenue */}
+          <QuarterValue label="Revenue" value={record.revenue} />
+
+          {/* Profit */}
+          <QuarterValue label="Profit" value={record.profit} />
+
+          {/* Ending Cash */}
+          <QuarterValue label="Cash" value={record.endingCash} />
         </span>
 
         <ChevronDown
@@ -392,24 +435,9 @@ function QuarterDisclosure({ record }: { record: QuarterHistoryRecord }) {
       </summary>
 
       <div className="grid gap-5 border-t border-border px-3 py-4 sm:grid-cols-3">
-        <div>
-          <p className="font-mono text-xs text-muted-foreground">Demand</p>
-          <p className="mt-1 font-mono font-bold tabular-nums">
-            {record.demand}
-          </p>
-        </div>
-        <div>
-          <p className="font-mono text-xs text-muted-foreground">Capacity</p>
-          <p className="mt-1 font-mono font-bold tabular-nums">
-            {record.capacity}
-          </p>
-        </div>
-        <div>
-          <p className="font-mono text-xs text-muted-foreground">Lost sales</p>
-          <p className="mt-1 font-mono font-bold tabular-nums">
-            {record.lostSales}
-          </p>
-        </div>
+        <DisclosureMetric label="Demand" value={record.demand} />
+        <DisclosureMetric label="Capacity" value={record.capacity} />
+        <DisclosureMetric label="lostSales" value={record.lostSales} />
         <p className="text-sm leading-6 text-muted-foreground sm:col-span-3">
           {record.eventEffect}
         </p>
@@ -421,7 +449,12 @@ function QuarterDisclosure({ record }: { record: QuarterHistoryRecord }) {
 function QuarterValue({ label, value }: { label: string; value: string }) {
   return (
     <span>
-      <span className="block font-mono text-xs text-muted-foreground lg:hidden">{label}</span> <span className="mt-1 block text-right font-mono text-sm font-bold tabular-nums">{value}</span>{" "}
+      <span className="block font-mono text-xs text-muted-foreground lg:hidden">
+        {label}
+      </span>{" "}
+      <span className="mt-1 block text-right font-mono text-sm font-bold tabular-nums">
+        {value}
+      </span>{" "}
     </span>
   );
 }
@@ -447,7 +480,7 @@ function toQuarterHistoryRecord(record: QuarterRecord): QuarterHistoryRecord {
     capacity: `${record.outcome.capacity.toLocaleString()} cups`,
     lostSales: `${record.outcome.lostSales.toLocaleString()} cups`,
     eventEffect: record.outcome.eventEffect,
-    turningPoint: record.outcome.turningPoint
+    turningPoint: record.outcome.turningPoint,
   };
 }
 
@@ -484,7 +517,7 @@ function getTrendDirection(start: number, end: number): TrendDirection {
   return "flat";
 }
 
-function getTrendDescription(direction: TrendDirection): string{
+function getTrendDescription(direction: TrendDirection): string {
   switch (direction) {
     case "up":
       return "increased";
@@ -495,7 +528,7 @@ function getTrendDescription(direction: TrendDirection): string{
   }
 }
 
-function getTrendSymbol(direction: TrendDirection): string{
+function getTrendSymbol(direction: TrendDirection): string {
   switch (direction) {
     case "up":
       return "↑";
@@ -509,15 +542,15 @@ function getTrendSymbol(direction: TrendDirection): string{
 function formatCashChange(change: number): string {
   if (change > 0) return `Up ${formatYen(change)}`;
   if (change < 0) return `Down ${formatYen(Math.abs(change))}`;
-  return "No change"
+  return "No change";
 }
 
-function formatDebtChange(change: number): string{
+function formatDebtChange(change: number): string {
   if (change < 0) {
-    return `Reduced ${formatYen(Math.abs(change))}`
+    return `Reduced ${formatYen(Math.abs(change))}`;
   }
   if (change > 0) {
-    return `Increased ${formatYen(change)}`
+    return `Increased ${formatYen(change)}`;
   }
   return "No change";
 }
