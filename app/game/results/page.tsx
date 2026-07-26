@@ -1,25 +1,20 @@
-"use client";
+import QuarterResultScreen from "@/components/game/quarter-results/QuarterResultScreen";
+import { ProfessorState } from "@/components/game/session/GameSession";
 
-import QuarterResults from "@/components/game/quarter-results/QuarterResults";
-import GameSessionHeader from "@/components/game/shared/GameSessionHeader";
-import { TOTAL_QUARTERS, useGameFlowStore } from "@/lib/stores/game-flow-store";
+type ResultsPageProps = {
+  searchParams: Promise<{
+    quarter?: string;
+    professor?: ProfessorState;
+  }>;
+};
 
-export default function ResultsPage() {
-  const quarter = useGameFlowStore(
-    (state) => state.completedQuarter ?? state.currentQuarter,
-  );
+export default async function ResultsPage({ searchParams }: ResultsPageProps) {
+  const params = await searchParams;
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <GameSessionHeader
-        quarter={quarter}
-        totalQuarters={TOTAL_QUARTERS}
-        brandAsHeading={false}
-      />
-      <QuarterResults
-        quarter={quarter}
-        professorState="loading"
-      />
-    </div>
+    <QuarterResultScreen
+      requestedQuarter={params.quarter}
+      professorState={params.professor ?? "loading"}
+    />
   );
 }
