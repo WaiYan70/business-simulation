@@ -1,11 +1,12 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CircleAlert, LoaderCircle, RotateCcw } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { TOTAL_QUARTERS, useGameFlowStore } from "@/lib/stores/game-flow-store";
+import { TOTAL_QUARTERS } from "../session/GameSession";
+import { useGameSessionStore } from "@/lib/stores/game-session-store";
 
 type CommitStatus = "idle" | "processing" | "slow" | "error";
 
@@ -14,37 +15,49 @@ const wait = (duration: number) =>
 
 export default function QuarterCommit({ quarter }: { quarter: number }) {
   const router = useRouter();
-  const completeCurrentQuarter = useGameFlowStore(
-    (state) => state.completeCurrentQuarter,
+  const commitCurrentQuarter = useGameSessionStore(
+    (state) => state.commitCurrentQuarter,
   );
   const slowTimer = useRef<number | null>(null);
+  const submitting = useRef(false);
   const [status, setStatus] = useState<CommitStatus>("idle");
 
   const isProcessing = status === "processing" || status === "slow";
 
+  function clearSlowTimer() {
+    if (slowTimer.current !== null) {
+      window.clearTimeout(slowTimer.current);
+      slowTimer.current = null;
+    }
+  }
+
+  useEffect(() => clearSlowTimer(), []);
+
   async function commitQuarter() {
+    if (submitting.current) return;
+    submitting.current = true;
     setStatus("processing");
     slowTimer.current = window.setTimeout(() => setStatus("slow"), 2000);
 
     try {
-      if (!navigator.onLine) {
-        throw new Error("The device is offline.");
-      }
+      await wait(450);
+      const record = commitCurrentQuarter();
+      clearSlowTimer();
 
-      // Static vertical slice: the real use case will replace this delay.
-      await wait(900);
-      completeCurrentQuarter();
       router.push(
-        quarter === TOTAL_QUARTERS ? "/game/results/final" : "/game/results",
+        quarter === TOTAL_QUARTERS
+          ? "/game/results/final"
+          : `/game/results?quarter=${record.quarter}`,
       );
     } catch {
-      if (slowTimer.current) window.clearTimeout(slowTimer.current);
+      clearSlowTimer();
+      submitting.current = false;
       setStatus("error");
     }
   }
 
   return (
-    <section className="space-y-3 pt-4" aria-labelledby="commit-quarter-title">
+    <section className="space-y-3 pt-4">
       <div className="flex items-center gap-5">
         <Button
           type="button"
@@ -64,7 +77,6 @@ export default function QuarterCommit({ quarter }: { quarter: number }) {
         </Button>
         <div>
           <h2
-            id="commit-quarter-title"
             className="font-serif text-2xl font-bold text-foreground"
           >
             Commit Quarter
@@ -84,8 +96,7 @@ export default function QuarterCommit({ quarter }: { quarter: number }) {
 
         {status === "slow" ? (
           <p className="font-mono text-xs text-muted-foreground">
-            Still processing. Keep this page open; your quarter has not been
-            submitted twice.
+            Still processing. Uour quarter has not been submitted twice.
           </p>
         ) : null}
 
@@ -95,10 +106,13 @@ export default function QuarterCommit({ quarter }: { quarter: number }) {
             role="alert"
           >
             <div className="flex gap-2 text-sm text-destructive">
-              <CircleAlert className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+              <CircleAlert
+                className="mt-0.5 size-4 shrink-0"
+                aria-hidden="true"
+              />
               <p>
-                We could not close the quarter. Nothing was saved, so it is
-                safe to try again.
+                We could not close the quarter. Nothing was saved, so it is safe
+                to try again.
               </p>
             </div>
             <Button
