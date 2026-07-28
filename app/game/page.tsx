@@ -33,7 +33,7 @@ export default function Dashboard() {
     return <GameSessionLoading label="Opening saved game" />;
   }
 
-  const scanario = getScenario(session.currentQuarter);
+  const scenario = getScenario(session.currentQuarter);
   const state = getCurrentBusinessState(session);
   const previousRecord = getLatestQuarterRecord(session);
 
@@ -50,7 +50,7 @@ export default function Dashboard() {
           <IncomeStatement record={previousRecord} />
         </div>
         <div className="flex min-w-0 flex-col gap-5">
-          <Events scanario={scanario} />
+          <Events scenario={scenario} />
           <Summary record={previousRecord} />
         </div>
         <Decisions />

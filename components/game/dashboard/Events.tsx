@@ -1,20 +1,24 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { QuarterScenario } from "../session/GameSession";
 
-export default function Events() {
+type EventsProps = {
+  scenario: QuarterScenario;
+};
+
+export default function Events({ scenario }: EventsProps) {
   return (
     <section className="space-y-5">
       <div className="rounded-lg border-l-4 border-primary bg-primary/10 p-5">
         <p className="font-mono text-xs font-bold uppercase tracking-[0.24em] text-primary">
-          Market event &middot; Q3
+          Market event &middot; Q{scenario.quarter}
         </p>
         <h2 className="mt-3 font-serif text-3xl font-bold leading-tight text-foreground">
-          Frost in Brazil &mdash; wholesale bean prices jump 18%
+          {scenario.event.title}
         </h2>
         <p className="mt-2 text-base font-medium text-muted-foreground">
-          Importers warn of two quarters of elevated arabica costs. Shops
-          without supply contracts are exposed.
+          {scenario.event.summary}
         </p>
       </div>
 

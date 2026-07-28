@@ -3,11 +3,32 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import {
-  stateSnapshot,
-  stateStats,
-} from "@/components/game/shared/sample-data";
+  BussinessState,
+  formatYen,
+  QuarterRecord,
+} from "../session/GameSession";
 
-export default function States() {
+type StatesProps = {
+  state: BussinessState;
+  previousRecord?: QuarterRecord;
+};
+
+export default function States({ state, previousRecord }: StatesProps) {
+  const previousProfit = previousRecord?.outcome.profit;
+  const stateStats = [
+    [
+      previousRecord
+        ? `Net Profit (Q${previousRecord.quarter})`
+        : "Net Profile",
+      previousProfit === undefined ? `No available` : formatYen(previousProfit),
+    ],
+    ["Loyal customer", state.loyalty.toLocaleString()],
+    ["Staff morale", `${state.morale}/100`],
+    ["Debt", formatYen(state.debt)],
+  ];
+
+  const competitorShare = Math.max(0, 100 - state.marketShare);
+
   return (
     <Card className="h-fit rounded-xl border border-border bg-card shadow-none">
       <CardContent className="space-y-6">
@@ -16,10 +37,10 @@ export default function States() {
             Cash on hand
           </p>
           <p className="mt-5 font-mono text-5xl font-bold tracking-tight text-primary">
-            {stateSnapshot.cashOnHand}
+            {formatYen(state.cash)}
           </p>
           <p className="mt-1 font-mono text-sm font-semibold text-primary">
-            ▲ {stateSnapshot.cashChange}
+            ▲ {stateStats}
           </p>
         </section>
 
@@ -28,9 +49,7 @@ export default function States() {
             <div key={label}>
               <div className="flex items-center justify-between gap-4 text-base">
                 <span className="text-muted-foreground">{label}</span>
-                <span
-                  className="font-mono font-bold text-foreground"
-                >
+                <span className="font-mono font-bold text-foreground">
                   {value}
                 </span>
               </div>
@@ -48,8 +67,14 @@ export default function States() {
               <div className="h-full w-[42%] bg-primary" />
             </div>
             <div className="mt-2 flex items-center justify-between font-mono text-xs text-muted-foreground">
-              <span>You 42%</span>
-              <span>Marudori 58%</span>
+              <div
+                className="h-full bg-primary"
+                style={{ width: `${state.marketShare}%` }}
+              />
+              <div
+                className="h-full bg-primary"
+                style={{ width: `${competitorShare}%` }}
+              />
             </div>
           </div>
         </section>
