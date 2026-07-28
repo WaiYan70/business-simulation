@@ -5,7 +5,7 @@ export const GAME_SESSION_SCHEMA_VERSION = 1;
 
 export type ProfessorState = "loading" | "slow" | "error" | "fallback";
 
-export type QuarterNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+export type QuarterNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 ;
 export type GameStatus = "active" | "completed";
 export type BigMove =
   | "staff-training"
@@ -20,7 +20,7 @@ export type PlayerDecision = {
   bigMove: BigMove;
 };
 
-export type BussinessState = {
+export type BusinessState = {
   cash: number;
   debt: number;
   loyalty: number;
@@ -37,7 +37,7 @@ export type QuarterOutcome = {
   demand: number;
   capacity: number;
   lostSales: number;
-  stateAfter: BussinessState;
+  stateAfter: BusinessState;
   eventEffect: string;
   turningPoint?: boolean;
 };
@@ -76,7 +76,7 @@ export type GameSession = {
   updateAt: string;
 };
 
-export const INITIAL_BUSINESS_STATE: BussinessState = {
+export const INITIAL_BUSINESS_STATE: BusinessState = {
   cash: 3_000_000,
   debt: 400_000,
   loyalty: 640,
@@ -187,7 +187,7 @@ export function getLatestQuarterRecord(
   return committed ? materializeQuarterRecord(committed) : undefined;
 }
 
-export function getCurrentBusinessState(session: GameSession): BussinessState {
+export function getCurrentBusinessState(session: GameSession): BusinessState {
   return (
     getLatestQuarterRecord(session)?.outcome.stateAfter ??
     INITIAL_BUSINESS_STATE

@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import {
   ArrowRight,
   CheckCircle2,
@@ -17,7 +16,6 @@ import FinalProfessorReview, {
 } from "@/components/game/final-results/FinalProfessorReview";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { useGameFlowStore } from "@/lib/stores/game-flow-store";
 import {
   formatYen,
   GameSession,

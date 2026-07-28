@@ -66,7 +66,9 @@ export default function Decisions() {
             step={10}
             aria-label="Price per cup"
             onValueChange={(value) => {
-              updateDecision({ price: value[0] });
+              updateDecision({
+                price: typeof value === "number" ? value : value[0],
+              });
             }}
           />
           <p className="flex items-center whitespace-nowrap font-mono text-xs text-muted-foreground">
@@ -86,7 +88,9 @@ export default function Decisions() {
             step={50_000}
             aria-label="Marketing budget"
             onValueChange={(value) => {
-              updateDecision({ marketing: value[0] });
+              updateDecision({
+                marketing: typeof value === "number" ? value : value[0],
+              });
             }}
           />
           <p className="font-mono text-xs text-muted-foreground">
@@ -184,9 +188,7 @@ function DecisionSection({
       <div className="flex items-center justify-between gap-4">
         <Label className="text-base font-bold">{label}</Label>
         {value ? (
-          <span className="font-mono font-bold text-primary">
-            {value}
-          </span>
+          <span className="font-mono font-bold text-primary">{value}</span>
         ) : null}
       </div>
       {children}

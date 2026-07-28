@@ -10,13 +10,13 @@ import Stats from "@/components/game/dashboard/States";
 import Summary from "@/components/game/dashboard/Summary";
 import GameSessionHeader from "@/components/game/shared/GameSessionHeader";
 import { useGameSessionStore } from "@/lib/stores/game-session-store";
-import GameSessionLoading from "./loading";
 import {
   getCurrentBusinessState,
   getLatestQuarterRecord,
   getScenario,
   TOTAL_QUARTERS,
 } from "@/components/game/session/GameSession";
+import GameSessionLoading from "@/components/game/shared/GameSessionLoading";
 
 export default function Dashboard() {
   const router = useRouter();

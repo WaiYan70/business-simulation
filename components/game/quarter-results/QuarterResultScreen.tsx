@@ -9,7 +9,7 @@ import { TOTAL_QUARTERS } from "@/lib/stores/game-flow-store";
 import { useEffect } from "react";
 import GameSessionHeader from "../shared/GameSessionHeader";
 import QuarterResults from "./QuarterResults";
-import GameSessionLoading from "@/app/game/loading";
+import GameSessionLoading from "../shared/GameSessionLoading";
 
 type QuarterResultScreenProps = {
   requestedQuarter?: string;

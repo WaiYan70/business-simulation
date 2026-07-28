@@ -3,11 +3,11 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-import GameSessionLoading from "@/app/game/loading";
 import { useGameSessionStore } from "@/lib/stores/game-session-store";
 import { ProfessorState, TOTAL_QUARTERS } from "../session/GameSession";
 import GameSessionHeader from "../shared/GameSessionHeader";
 import FinalResults from "./FinalResults";
+import GameSessionLoading from "../shared/GameSessionLoading";
 
 export default function FinalResultScreen({
   professorState,
