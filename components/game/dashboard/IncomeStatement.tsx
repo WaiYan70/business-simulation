@@ -1,8 +1,31 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { incomeStatementStats } from "@/components/game/shared/sample-data";
+import { formatYen, QuarterRecord } from "../session/GameSession";
 
-export default function IncomeStatement() {
+type IncomeStatementProps = {
+  record?: QuarterRecord;
+};
+
+export default function IncomeStatement({ record }: IncomeStatementProps) {
+  const rows = record
+    ? [
+        ["Sales revenue", formatYen(record.outcome.revenue)],
+        ["Cost of goods sold", formatYen(record.outcome.costOfGoodsSold)],
+        [
+          "Gross profit",
+          formatYen(record.outcome.revenue - record.outcome.costOfGoodsSold),
+        ],
+        ["Operating expenses", formatYen(record.outcome.operatingExpenses)],
+        ["Net profit", formatYen(record.outcome.profit)],
+      ]
+    : [
+        ["Sales revenue", "Not available"],
+        ["Cost of goods sold", "Not available"],
+        ["Gross profit", "Not available"],
+        ["Operating expenses", "Not available"],
+        ["Net profit", "Not available"],
+      ];
+
   return (
     <section>
       <Card className="h-fit rounded-xl border border-border bg-card shadow-none">
@@ -11,7 +34,7 @@ export default function IncomeStatement() {
             Income Statement{" "}
           </h2>
           <div className="space-y-3">
-            {incomeStatementStats.map(([label, value], index) => (
+            {rows.map(([label, value], index) => (
               <div key={label}>
                 <div className="flex items-center justify-between gap-4 text-base">
                   <span className="text-muted-foreground">{label}</span>
@@ -19,7 +42,7 @@ export default function IncomeStatement() {
                     {value}
                   </span>
                 </div>
-                {index < incomeStatementStats.length - 1 && (
+                {index < rows.length - 1 && (
                   <Separator className="mt-3 border border-dashed border-border bg-transparent" />
                 )}
               </div>
