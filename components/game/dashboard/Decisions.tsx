@@ -17,7 +17,7 @@ const bigMoveOptions: Array<{
 }> = [
   {
     value: "staff-training",
-    label: "2nd location",
+    label: "Staff training",
     cost: "¥8,000,000",
   },
   {
@@ -132,7 +132,7 @@ export default function Decisions() {
           </p>
         </DecisionSection>
 
-        <DecisionSection label="5 Big move" value="One or none">
+        <DecisionSection label="4 Big move" value="One or none">
           <ToggleGroup
             value={[decision.bigMove]}
             className="grid w-full grid-cols-2 gap-2"

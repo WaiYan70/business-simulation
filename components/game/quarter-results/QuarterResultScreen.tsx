@@ -1,3 +1,5 @@
+"use client"
+
 import { useRouter } from "next/navigation";
 import {
   getQuarterRecord,
@@ -52,10 +54,14 @@ export default function QuarterResultScreen({
   return (
     <div className="min-h-screen bg-background text-foreground">
       <GameSessionHeader
-        quarter={record.quarter}
+        quarter={session.currentQuarter}
+        viewingQuarter={record.quarter}
         totalQuarters={TOTAL_QUARTERS}
         brandAsHeading={false}
         completed={gameCompleted}
+        availableResultQuarters={session.records.map(
+          (committed) => committed.quarter,
+        )}
       />
       <QuarterResults
         record={record}

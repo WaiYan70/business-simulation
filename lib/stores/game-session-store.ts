@@ -140,13 +140,13 @@ export const useGameSessionStore = create<GameSessionStore>((set, get) => ({
       persistSession(next);
       set({
         session: next,
-        persistenceError: null
-      })
+        persistenceError: null,
+      });
     } catch {
       set({
         persistenceError: "A new game could not be saved to browser storage.",
-      })
+      });
+      throw new Error("A new game could not be saved.");
     }
-    throw new Error("A new game could not be saved.")
   },
 }));

@@ -31,7 +31,9 @@ export default function QuarterCommit({ quarter }: { quarter: number }) {
     }
   }
 
-  useEffect(() => clearSlowTimer(), []);
+  useEffect(() => {
+    return clearSlowTimer;
+  }, []);
 
   async function commitQuarter() {
     if (submitting.current) return;

@@ -20,8 +20,6 @@ type QuarterResultsProps = {
   professorState?: ProfessorState;
 };
 
-type LedgerRow = readonly [label: string, value: string];
-
 const BIG_MOVE_LABELS: Record<QuarterRecord["decision"]["bigMove"], string> = {
   "staff-training": "Staff Training",
   "loyalty-program": "Loyalty Program",
@@ -243,7 +241,7 @@ function LedgerList({
   quarter: number;
   rows: ReadonlyArray<readonly [string, string]>;
 }) {
-  const headingId = `${title.toLowerCase().replaceAll("", "-")}-heading`;
+  const headingId = `${title.toLowerCase().replaceAll(" ", "-")}-heading`;
 
   return (
     <section aria-labelledby={headingId}>

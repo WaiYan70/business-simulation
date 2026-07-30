@@ -17,15 +17,14 @@ export default function States({ state, previousRecord }: StatesProps) {
   const previousProfit = previousRecord?.outcome.profit;
   const stateStats = [
     [
-      previousRecord
-        ? `Net Profit (Q${previousRecord.quarter})`
-        : "Net Profile",
+      previousRecord ? `Net Profit (Q${previousRecord.quarter})` : "Net Profit",
       previousProfit === undefined ? `No available` : formatYen(previousProfit),
     ],
     ["Loyal customer", state.loyalty.toLocaleString()],
     ["Staff morale", `${state.morale}/100`],
     ["Debt", formatYen(state.debt)],
   ];
+  const cashChange = previousRecord?.outcome.profit;
 
   const competitorShare = Math.max(0, 100 - state.marketShare);
 
@@ -39,8 +38,13 @@ export default function States({ state, previousRecord }: StatesProps) {
           <p className="mt-5 font-mono text-5xl font-bold tracking-tight text-primary">
             {formatYen(state.cash)}
           </p>
+
           <p className="mt-1 font-mono text-sm font-semibold text-primary">
-            ▲ {stateStats}
+            {cashChange === undefined
+              ? "Opening balance"
+              : `${cashChange >= 0 ? "▲" : "▼"} ${formatYen(
+                  Math.abs(cashChange),
+                )} last quarter`}
           </p>
         </section>
 
@@ -63,18 +67,17 @@ export default function States({ state, previousRecord }: StatesProps) {
             <p className="font-mono text-xs font-bold uppercase tracking-[0.24em] text-muted-foreground">
               Market share
             </p>
+
             <div className="mt-4 h-4 overflow-hidden rounded-full bg-secondary">
-              <div className="h-full w-[42%] bg-primary" />
-            </div>
-            <div className="mt-2 flex items-center justify-between font-mono text-xs text-muted-foreground">
               <div
                 className="h-full bg-primary"
                 style={{ width: `${state.marketShare}%` }}
               />
-              <div
-                className="h-full bg-primary"
-                style={{ width: `${competitorShare}%` }}
-              />
+            </div>
+
+            <div className="mt-2 flex items-center justify-between font-mono text-xs text-muted-foreground">
+              <span>You {state.marketShare}%</span>
+              <span>Marudori {competitorShare}%</span>
             </div>
           </div>
         </section>
