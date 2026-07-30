@@ -17,13 +17,14 @@ import FinalProfessorReview, {
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
+  formatDecisionSummary,
   formatYen,
-  GameSession,
+  type GameSession,
   getCumulativeTotals,
   getCurrentBusinessState,
   INITIAL_BUSINESS_STATE,
   materializeQuarterRecord,
-  QuarterRecord,
+  type QuarterRecord,
 } from "../session/GameSession";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -466,11 +467,13 @@ function DisclosureMetric({ label, value }: { label: string; value: string }) {
   );
 }
 
-function toQuarterHistoryRecord(record: QuarterRecord): QuarterHistoryRecord {
+function toQuarterHistoryRecord(
+  record: QuarterRecord,
+): QuarterHistoryRecord {
   return {
     quarter: record.quarter,
     event: record.scenario.event.title,
-    decisions: formatDecision(record),
+    decisions: formatDecisionSummary(record.decision),
     revenue: formatYen(record.outcome.revenue),
     profit: formatYen(record.outcome.profit),
     endingCash: formatYen(record.outcome.stateAfter.cash),
@@ -480,33 +483,6 @@ function toQuarterHistoryRecord(record: QuarterRecord): QuarterHistoryRecord {
     eventEffect: record.outcome.eventEffect,
     turningPoint: record.outcome.turningPoint,
   };
-}
-
-function formatBigMove(bigMove: QuarterRecord["decision"]["bigMove"]): string {
-  switch (bigMove) {
-    case "staff-training":
-      return "Staff training";
-    case "loyalty-program":
-      return "Loyalty program";
-    case "renovate":
-      return "Renovation";
-    case "none":
-      return "No big move";
-  }
-}
-
-function formatDecision(record: QuarterRecord): string {
-  const { decision } = record;
-  const bigMove =
-    decision.bigMove === "none"
-      ? "No Big Move"
-      : formatBigMove(decision.bigMove);
-  return [
-    `${formatYen(decision.price)} cup`,
-    `${formatYen(decision.marketing)} marketing`,
-    `${decision.staff} staff`,
-    bigMove,
-  ].join(" · ");
 }
 
 function getTrendDirection(start: number, end: number): TrendDirection {

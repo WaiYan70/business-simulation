@@ -4,10 +4,10 @@ import { useRouter } from "next/navigation";
 import {
   getQuarterRecord,
   parseQuarter,
-  ProfessorState,
+  TOTAL_QUARTERS,
+  type ProfessorState,
 } from "../session/GameSession";
 import { useGameSessionStore } from "@/lib/stores/game-session-store";
-import { TOTAL_QUARTERS } from "@/lib/stores/game-flow-store";
 import { useEffect } from "react";
 import GameSessionHeader from "../shared/GameSessionHeader";
 import QuarterResults from "./QuarterResults";

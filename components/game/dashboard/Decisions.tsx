@@ -8,17 +8,21 @@ import { Slider } from "@/components/ui/slider";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import QuarterCommit from "@/components/game/dashboard/QuarterCommit";
 import { useGameSessionStore } from "@/lib/stores/game-session-store";
-import { BigMove, formatYen } from "../session/GameSession";
+import {
+  type BigMove,
+  type BigMoveChoice,
+  formatYen,
+} from "../session/GameSession";
 
 const bigMoveOptions: Array<{
-  value: BigMove;
+  value: BigMoveChoice;
   label: string;
   cost: string;
 }> = [
   {
     value: "staff-training",
     label: "Staff training",
-    cost: "¥8,000,000",
+    cost: "¥800,000",
   },
   {
     value: "loyalty-program",
@@ -47,6 +51,31 @@ export default function Decisions() {
   if (!session || session.status !== "active") return null;
 
   const decision = session.draftDecision;
+
+  const displayedBigMoves: BigMoveChoice[] =
+    decision.bigMoves.length > 0 ? decision.bigMoves : ["none"];
+
+  function handleBigMoveChange(values: string[]) {
+    const nextValues = values as BigMoveChoice[];
+    const previousValues = displayedBigMoves;
+
+    const newlySelected = nextValues.find(
+      (value) => !previousValues.includes(value),
+    );
+
+    if (newlySelected === "none") {
+      updateDecision({ bigMoves: [] });
+      return;
+    }
+
+    const selectedMoves = nextValues.filter(
+      (value): value is BigMove => value !== "none",
+    );
+
+    updateDecision({
+      bigMoves: selectedMoves,
+    });
+  }
 
   return (
     <Card className="h-fit rounded-xl border border-border bg-card shadow-none">
@@ -132,15 +161,20 @@ export default function Decisions() {
           </p>
         </DecisionSection>
 
-        <DecisionSection label="4 Big move" value="One or none">
+        <DecisionSection
+          label="4 Big moves"
+          value={
+            decision.bigMoves.length === 0
+              ? "None"
+              : `${decision.bigMoves.length} selected`
+          }
+        >
           <ToggleGroup
-            value={[decision.bigMove]}
+            multiple
+            value={displayedBigMoves}
             className="grid w-full grid-cols-2 gap-2"
-            aria-label="Big move"
-            onValueChange={(values) => {
-              const bigMove = values[0] as BigMove | undefined;
-              if (bigMove) updateDecision({ bigMove });
-            }}
+            aria-label="Big moves"
+            onValueChange={handleBigMoveChange}
           >
             {bigMoveOptions.map((option) => (
               <ToggleGroupItem
@@ -150,6 +184,7 @@ export default function Decisions() {
               >
                 <span className="flex flex-col items-start">
                   <span className="font-semibold">{option.label}</span>
+
                   <span className="font-mono text-xs text-muted-foreground">
                     {option.cost}
                   </span>

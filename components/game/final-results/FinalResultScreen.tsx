@@ -47,6 +47,7 @@ export default function FinalResultScreen({
         totalQuarters={TOTAL_QUARTERS}
         brandAsHeading={false}
         completed
+        availableResultQuarters={session.records.map((record)=> record.quarter)}
       />
       <FinalResults
         session={session}

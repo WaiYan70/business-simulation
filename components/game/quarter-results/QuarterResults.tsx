@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
   formatYen,
+  type BigMove,
   type ProfessorState,
   type QuarterRecord,
 } from "../session/GameSession";
@@ -20,11 +21,10 @@ type QuarterResultsProps = {
   professorState?: ProfessorState;
 };
 
-const BIG_MOVE_LABELS: Record<QuarterRecord["decision"]["bigMove"], string> = {
-  "staff-training": "Staff Training",
-  "loyalty-program": "Loyalty Program",
+const BIG_MOVE_LABELS: Record<BigMove, string> = {
+  "staff-training": "Staff training",
+  "loyalty-program": "Loyalty program",
   renovate: "Renovate",
-  none: "None",
 };
 
 export default function QuarterResults({
@@ -37,11 +37,18 @@ export default function QuarterResults({
 
   const { quarter, decision, scenario, outcome } = record;
 
+  const bigMovesValue =
+    decision.bigMoves.length === 0
+      ? "None"
+      : decision.bigMoves
+          .map((move) => BIG_MOVE_LABELS[move])
+          .join(", ");
+
   const decisionRows = [
     ["Price per cup", formatYen(decision.price)],
     ["Marketing", formatYen(decision.marketing)],
     ["Staff", `${decision.staff}`],
-    ["Big move", decision.bigMove.replaceAll("-", " ")],
+    ["Big moves", bigMovesValue],
   ] as const;
 
   const businessRows = [
@@ -59,13 +66,14 @@ export default function QuarterResults({
     ["Net profit", formatYen(outcome.profit)],
   ] as const;
 
+
   const profitDescription =
     outcome.profit >= 0
       ? `net profit of ${formatYen(outcome.profit)}`
       : `net loss of ${formatYen(Math.abs(outcome.profit))}`;
 
   const demandDescription =
-    outcome.profit >= 0
+    outcome.profit > 0
       ? `${outcome.lostSales.toLocaleString(
           "en-US",
         )} potential sales were lost because demand exceeded available capacity.`

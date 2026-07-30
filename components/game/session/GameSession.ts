@@ -1,23 +1,21 @@
 import { SCENARIOS } from "./sample-data-game-scenario";
 
 export const TOTAL_QUARTERS = 8;
-export const GAME_SESSION_SCHEMA_VERSION = 1;
+export const GAME_SESSION_SCHEMA_VERSION = 2;
 
 export type ProfessorState = "loading" | "slow" | "error" | "fallback";
 
-export type QuarterNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 ;
+export type QuarterNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 export type GameStatus = "active" | "completed";
-export type BigMove =
-  | "staff-training"
-  | "loyalty-program"
-  | "renovate"
-  | "none";
+export type BigMove = "staff-training" | "loyalty-program" | "renovate";
+
+export type BigMoveChoice = BigMove | "none";
 
 export type PlayerDecision = {
   price: number;
   marketing: number;
   staff: number;
-  bigMove: BigMove;
+  bigMoves: BigMove[];
 };
 
 export type BusinessState = {
@@ -95,7 +93,7 @@ export function createGameSession(id: string, now: string): GameSession {
     version: 0,
     status: "active",
     currentQuarter: 1,
-    draftDecision: { ...getScenario(1).defaultDecision },
+    draftDecision: cloneDecision(getScenario(1).defaultDecision),
     records: [],
     createAt: now,
     updateAt: now,
@@ -134,7 +132,7 @@ export function commitGameQuarter(
 
   const committed: CommittedQuarter = {
     quarter,
-    decision: { ...session.draftDecision },
+    decision: cloneDecision(session.draftDecision),
     committedAt: now,
   };
 
@@ -150,8 +148,8 @@ export function commitGameQuarter(
       status: completed ? "completed" : "active",
       currentQuarter: nextQuarter,
       draftDecision: completed
-        ? session.draftDecision
-        : { ...getScenario(nextQuarter).defaultDecision },
+        ? cloneDecision(session.draftDecision)
+        : cloneDecision(getScenario(nextQuarter).defaultDecision),
       records: [...session.records, committed],
       updateAt: now,
     },
@@ -218,27 +216,81 @@ export function formatYen(value: number): string {
   return `¥${value.toLocaleString("en-US")}`;
 }
 
-export function formatDecisionSummary(decision: PlayerDecision): string {
-  const bigMove =
-    decision.bigMove === "none"
-      ? ""
-      : ` . ${decision.bigMove.replaceAll("-", " ")}`;
-  return `${formatYen(decision.price)} cup · ${formatYen(decision.marketing)} marketing  · ${decision.staff} staff  · ${bigMove} `;
+function cloneDecision(decision: PlayerDecision): PlayerDecision {
+  return {
+    ...decision,
+    bigMoves: [...decision.bigMoves],
+  };
 }
 
-function clampToStep(value: number, minimum: number, maximum: number, step: number): number{
-  const finite = Number.isFinite(value) ? value : minimum
-  const clamped = Math.min(Math.max(finite, minimum), maximum)
-  return Math.round(clamped / step) * step
+const BIG_MOVE_LABELS: Record<BigMove, string> = {
+  "staff-training": "Staff training",
+  "loyalty-program": "Loyalty program",
+  renovate: "Renovate",
+};
+
+export function formatDecisionSummary(
+  decision: PlayerDecision,
+): string {
+  const moves =
+    decision.bigMoves.length === 0
+      ? "No big move"
+      : decision.bigMoves
+          .map((move) => BIG_MOVE_LABELS[move])
+          .join(" + ");
+
+  return [
+    `${formatYen(decision.price)} cup`,
+    `${formatYen(decision.marketing)} marketing`,
+    `${decision.staff} staff`,
+    moves,
+  ].join(" · ");
 }
 
-function normalizeDecision(decision: PlayerDecision): PlayerDecision{
+function clampToStep(
+  value: number,
+  minimum: number,
+  maximum: number,
+  step: number,
+): number {
+  const finite = Number.isFinite(value) ? value : minimum;
+  const clamped = Math.min(Math.max(finite, minimum), maximum);
+  return Math.round(clamped / step) * step;
+}
+
+const BIG_MOVES: readonly BigMove[] = [
+  "staff-training",
+  "loyalty-program",
+  "renovate",
+];
+
+function isBigMove(value: unknown): value is BigMove {
+  return typeof value === "string" && BIG_MOVES.includes(value as BigMove);
+}
+
+function normalizeDecision(decision: PlayerDecision): PlayerDecision {
   return {
     price: clampToStep(decision.price, 400, 800, 10),
     marketing: clampToStep(decision.marketing, 0, 1_500_000, 50_000),
     staff: clampToStep(decision.staff, 2, 1000, 1),
-    bigMove: ["staff-training", "loyalty-program", "renovate", "none"].includes(decision.bigMove)? decision.bigMove : "none",
+    bigMoves: [...new Set(decision.bigMoves.filter(isBigMove))],
+  };
+}
+
+function isPlayerDecision(value: unknown): value is PlayerDecision {
+  if (!value || typeof value !== "object") {
+    return false;
   }
+
+  const decision = value as Partial<PlayerDecision>;
+
+  return (
+    typeof decision.price === "number" &&
+    typeof decision.marketing === "number" &&
+    typeof decision.staff === "number" &&
+    Array.isArray(decision.bigMoves) &&
+    decision.bigMoves.every(isBigMove)
+  );
 }
 
 export function isGameSession(value: unknown): value is GameSession {
@@ -251,7 +303,7 @@ export function isGameSession(value: unknown): value is GameSession {
     typeof session.id !== "string" ||
     !Number.isInteger(session.version) ||
     !Array.isArray(session.records) ||
-    !session.draftDecision ||
+    !isPlayerDecision(session.draftDecision) ||
     (session.status !== "active" && session.status !== "completed")
   ) {
     return false;
@@ -271,7 +323,7 @@ export function isGameSession(value: unknown): value is GameSession {
     (record, index) =>
       record?.quarter === index + 1 &&
       typeof record.committedAt === "string" &&
-      record.decision !== undefined,
+      isPlayerDecision(record.decision)
   );
 
   if (!sequential || session.version !== session.records.length) {

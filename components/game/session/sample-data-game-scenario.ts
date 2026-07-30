@@ -12,7 +12,7 @@ export const SCENARIOS: readonly QuarterScenario[] = [
       price: 520,
       marketing: 200_000,
       staff: 3,
-      bigMove: "none",
+      bigMoves: [],
     },
     outcome: {
       headline: "A steady opening established the operating baseline",
@@ -44,7 +44,7 @@ export const SCENARIOS: readonly QuarterScenario[] = [
       price: 540,
       marketing: 500_000,
       staff: 4,
-      bigMove: "none",
+      bigMoves: [],
     },
     outcome: {
       headline: "Festival demand exposed the shop's first capacity constraint",
@@ -77,7 +77,7 @@ export const SCENARIOS: readonly QuarterScenario[] = [
       price: 560,
       marketing: 450_000,
       staff: 4,
-      bigMove: "loyalty-program",
+      bigMoves: ["loyalty-program"],
     },
     outcome: {
       headline: "A profitable quarter, with pressure behind the numbers",
@@ -109,7 +109,7 @@ export const SCENARIOS: readonly QuarterScenario[] = [
       price: 550,
       marketing: 700_000,
       staff: 4,
-      bigMove: "none",
+      bigMoves: [],
     },
     outcome: {
       headline: "The business remained profitable through weaker traffic",
@@ -141,7 +141,7 @@ export const SCENARIOS: readonly QuarterScenario[] = [
       price: 590,
       marketing: 350_000,
       staff: 4,
-      bigMove: "none",
+      bigMoves: [],
     },
     outcome: {
       headline: "Higher input costs compressed an otherwise stable quarter",
@@ -174,7 +174,7 @@ export const SCENARIOS: readonly QuarterScenario[] = [
       price: 610,
       marketing: 600_000,
       staff: 5,
-      bigMove: "loyalty-program",
+      bigMoves: ["loyalty-program"],
     },
     outcome: {
       headline: "Loyal demand grew without exhausting the expanded capacity",
@@ -206,7 +206,7 @@ export const SCENARIOS: readonly QuarterScenario[] = [
       price: 620,
       marketing: 300_000,
       staff: 5,
-      bigMove: "renovate",
+      bigMoves: ["renovate"],
     },
     outcome: {
       headline: "Repairs constrained the quarter, but the ledger remained positive",
@@ -238,7 +238,7 @@ export const SCENARIOS: readonly QuarterScenario[] = [
       price: 640,
       marketing: 800_000,
       staff: 5,
-      bigMove: "none",
+      bigMoves: [],
     },
     outcome: {
       headline: "The final quarter closed a profitable eight-quarter run",
