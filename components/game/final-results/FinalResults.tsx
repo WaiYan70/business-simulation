@@ -333,10 +333,10 @@ function BusinessLedger({ items }: { items: BusinessConditionItem[] }) {
               </span>
               <span>{item.end}</span>
               <span className="sr-only">
-                {item.direction === "up" ? "increased" : "decreased"}
+                {getTrendDescription(item.direction)}
               </span>
               <span className="text-primary" aria-hidden="true">
-                {item.direction === "up" ? "↑" : "↓"}
+                {getTrendSymbol(item.direction)}
               </span>
             </dd>
           </div>
