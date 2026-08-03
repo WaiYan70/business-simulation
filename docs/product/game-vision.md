@@ -1,7 +1,7 @@
 # Kissaten Tycoon — Game Vision
 
 ## Product statement
-Kissaten Tycoon is a web-based educational business simulation in which the player manages an existing Japanese specialty coffee shop over four quarterly turns.
+Kissaten Tycoon is a web-based educational business simulation in which the player manages an existing Japanese specialty coffee shop over eight quarterly turns.
 
 The game combines deterministic business simulation, meaningful strategy, explainable cause-and-effect, and AI-assisted teaching.
 
@@ -35,7 +35,16 @@ The MVP exposes a few decisions per quarter while interactions create depth.
 The Professor explains business concepts using actual game results without prescribing one perfect move.
 
 ## MVP success criteria
-A new player can start quickly, finish one run, understand why major outcomes occurred, recognize at least one tradeoff, and want to replay with another strategy.
+A new player can:
+
+- understand the game from the landing page
+- start and complete one eight-quarter guest game without registering
+- understand why major outcomes occurred and recognize at least one tradeoff
+- sign in with Google before playing again
+- complete up to three authenticated games per UTC day
+- revisit completed authenticated games through game history
+
+The experience should make the player want to replay with another strategy without hiding the rules or requiring an account before the first game.
 
 ## Long-term possibilities
 Multiple scenarios, richer inventory, employee personalities, suppliers, loans, branches, competitor memory, scenario creation, and other business types are future work, not MVP requirements.

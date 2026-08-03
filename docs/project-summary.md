@@ -2,7 +2,7 @@
 
 ## Project overview
 
-Kissaten Tycoon is a web-based business simulation game where the player manages an existing Japanese specialty coffee shop over four quarterly turns.
+Kissaten Tycoon is a web-based business simulation game where the player manages an existing Japanese specialty coffee shop over eight quarterly turns.
 
 The project combines:
 
@@ -13,6 +13,12 @@ The project combines:
 - limited guest and authenticated gameplay
 
 The MVP is built as a single Next.js application using a modular-monolith architecture.
+
+The website is divided into three player-facing experiences:
+
+1. A public marketing experience containing the landing page.
+2. A website experience containing game start or resume, history, settings, and account navigation.
+3. An immersive game-session experience containing the dashboard, quarter results, and final report.
 
 ## Core problem
 
@@ -103,8 +109,10 @@ Selects events from a controlled catalog. Numeric effects are predefined and det
 
 ### Guest
 
-- may complete one game without an account
+- receives a signed, opaque guest identity in a secure server-managed cookie
+- may complete one lifetime trial game without an account
 - may resume one active game
+- may view the completed trial report
 - must sign in before starting another game
 
 ### Authenticated user
@@ -112,16 +120,30 @@ Selects events from a controlled catalog. Numeric effects are predefined and det
 - may complete three games per UTC day
 - may have one active game at a time
 - keeps game history
+- receives a new allowance window at 00:00 UTC
 
-Only successful completion of quarter four consumes an allowance.
+Only a successfully persisted completion of quarter eight consumes an allowance. Starting, abandoning, or failing to complete a game does not consume one. A claimed guest completion remains a guest trial and does not reduce the authenticated daily allowance.
+
+Authentication identifies the player, authorization verifies game ownership, and entitlements decide whether another game may be started or completed. These checks are enforced on the server rather than trusted to the browser.
+
+## Authentication and persistence stack
+
+- Better Auth with Google OAuth provides authenticated users and database-backed sessions.
+- Neon PostgreSQL stores guests, games, turns, results, calculation traces, Professor output, completion usage, and game history.
+- Drizzle ORM defines the relational schema, migrations, repositories, and transactional database operations.
+- Zod validates requests and JSON persistence boundaries.
+
+The database is authoritative for identity ownership, current game state, history, and completion allowance. Browser storage may hold non-authoritative interface preferences or form drafts, but it must not own game state, financial results, authentication, authorization, or quota counts.
 
 ## MVP success criteria
 
 The MVP succeeds when:
 
 - a visitor can start immediately
-- a guest can complete one full game
+- a guest can complete one full eight-quarter game
 - an authenticated player can complete up to three games per UTC day
+- a signed-in player can view completed games in game history
+- one player cannot access another player's game by guessing its identifier
 - simulation results are reproducible
 - important calculations are explainable
 - the Professor provides useful feedback
