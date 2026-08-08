@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
+    describeCapacityCoverage,
   formatYen,
   type BigMove,
   type ProfessorState,
@@ -72,12 +73,7 @@ export default function QuarterResults({
       ? `net profit of ${formatYen(outcome.profit)}`
       : `net loss of ${formatYen(Math.abs(outcome.profit))}`;
 
-  const demandDescription =
-    outcome.profit > 0
-      ? `${outcome.lostSales.toLocaleString(
-          "en-US",
-        )} potential sales were lost because demand exceeded available capacity.`
-      : "Available capacity covered the quarter's recorded demand.";
+  const demandDescription = describeCapacityCoverage(outcome.lostSales)
 
   return (
     <main className="mx-auto w-full max-w-[1600px] px-4 py-6 sm:px-6 lg:py-8">

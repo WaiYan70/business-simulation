@@ -229,15 +229,21 @@ const BIG_MOVE_LABELS: Record<BigMove, string> = {
   renovate: "Renovate",
 };
 
-export function formatDecisionSummary(
-  decision: PlayerDecision,
-): string {
+export function formatQuarterSeason(quarter: number, season: string): string {
+  return `Q ${quarter} · ${season}`;
+}
+
+export function describeCapacityCoverage(lostSales: number): string {
+  return lostSales > 0
+    ? `${lostSales.toLocaleString("en-US")} potential sales were lost because demand exceeded available capacity.`
+    : "available capacity covered the quarter's recorded demand.";
+}
+
+export function formatDecisionSummary(decision: PlayerDecision): string {
   const moves =
     decision.bigMoves.length === 0
       ? "No big move"
-      : decision.bigMoves
-          .map((move) => BIG_MOVE_LABELS[move])
-          .join(" + ");
+      : decision.bigMoves.map((move) => BIG_MOVE_LABELS[move]).join(" + ");
 
   return [
     `${formatYen(decision.price)} cup`,
@@ -323,7 +329,7 @@ export function isGameSession(value: unknown): value is GameSession {
     (record, index) =>
       record?.quarter === index + 1 &&
       typeof record.committedAt === "string" &&
-      isPlayerDecision(record.decision)
+      isPlayerDecision(record.decision),
   );
 
   if (!sequential || session.version !== session.records.length) {

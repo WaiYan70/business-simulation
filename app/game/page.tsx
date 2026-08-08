@@ -48,6 +48,7 @@ export default function Dashboard() {
     <div className="min-h-screen bg-background text-foreground">
       <GameSessionHeader
         quarter={session.currentQuarter}
+        season={scenario.season}
         totalQuarters={TOTAL_QUARTERS}
         availableResultQuarters={session.records.map(
           (record) => record.quarter,

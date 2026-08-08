@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import {
   getQuarterRecord,
+  getScenario,
   parseQuarter,
   TOTAL_QUARTERS,
   type ProfessorState,
@@ -55,6 +56,7 @@ export default function QuarterResultScreen({
     <div className="min-h-screen bg-background text-foreground">
       <GameSessionHeader
         quarter={session.currentQuarter}
+        season={getScenario(session.currentQuarter).season}
         viewingQuarter={record.quarter}
         totalQuarters={TOTAL_QUARTERS}
         brandAsHeading={false}

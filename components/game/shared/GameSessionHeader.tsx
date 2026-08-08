@@ -1,7 +1,9 @@
 import Link from "next/link";
+import { formatQuarterSeason } from "../session/GameSession";
 
 type GameSessionHeaderProps = {
   quarter?: number;
+  season?: string;
   totalQuarters?: number;
   brandAsHeading?: boolean;
   completed?: boolean;
@@ -11,6 +13,7 @@ type GameSessionHeaderProps = {
 
 export default function GameSessionHeader({
   quarter = 1,
+  season,
   totalQuarters = 8,
   brandAsHeading = true,
   completed = false,
@@ -34,6 +37,7 @@ export default function GameSessionHeader({
 
       <CurrentQuarter
         quarter={quarter}
+        season={season}
         completed={completed}
         viewingQuarter={viewingQuarter}
       />
@@ -46,10 +50,7 @@ function GameIdentity({ asHeading }: { asHeading: boolean }) {
 
   return (
     <Component className="min-w-fit font-serif text-2xl font-bold tracking-wide text-foreground sm:text-3xl md:text-4xl">
-      KISSATEN{" "}
-      <span className="bg-primary/20 px-1 text-primary">
-        TYCOON
-      </span>
+      KISSATEN <span className="bg-primary/20 px-1 text-primary">TYCOON</span>
     </Component>
   );
 }
@@ -82,11 +83,9 @@ function Quarters({
       aria-label="Quarter progress"
     >
       {quarters.map((quarter) => {
-        const isCommitted =
-          completed || availableResults.has(quarter);
+        const isCommitted = completed || availableResults.has(quarter);
 
-        const isCurrent =
-          !completed && quarter === currentQuarter;
+        const isCurrent = !completed && quarter === currentQuarter;
 
         const isViewing = quarter === viewingQuarter;
 
@@ -101,8 +100,7 @@ function Quarters({
         const className = [
           "flex size-8 items-center justify-center rounded-full border text-sm font-semibold outline-none transition-colors",
           "focus-visible:ring-3 focus-visible:ring-ring/30",
-          isCommitted &&
-            "border-foreground bg-foreground text-background",
+          isCommitted && "border-foreground bg-foreground text-background",
           isCurrent &&
             "border-primary bg-background text-primary ring-2 ring-primary/20",
           isViewing &&
@@ -127,11 +125,7 @@ function Quarters({
                     : `View Quarter ${quarter} results`
                 }
                 aria-current={
-                  isViewing
-                    ? "page"
-                    : isCurrent
-                      ? "step"
-                      : undefined
+                  isViewing ? "page" : isCurrent ? "step" : undefined
                 }
               >
                 {quarter}
@@ -154,20 +148,27 @@ function Quarters({
 
 function CurrentQuarter({
   quarter,
+  season,
   completed,
   viewingQuarter,
 }: {
   quarter: number;
+  season?: string;
   completed: boolean;
   viewingQuarter?: number;
 }) {
   const viewingHistoricalResult =
     viewingQuarter !== undefined && viewingQuarter !== quarter;
+  const quarterStatus = completed
+    ? "Game Completed"
+    : season
+      ? formatQuarterSeason(quarter, season)
+      : `Q${quarter}`;
 
   return (
     <div className="hidden min-w-fit text-right lg:block">
       <p className="font-serif text-lg font-semibold text-muted-foreground">
-        {completed ? "Game complete" : `Q${quarter} · Summer`}
+        { quarterStatus}
         {" — Shimokitazawa, Tokyo"}
       </p>
 
