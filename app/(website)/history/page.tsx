@@ -1,9 +1,7 @@
-import Link from "next/link";
-
-export default function PlayPage() {
+export default function HistoryPage() {
   return (
-    <section>
-      <h1>Game History</h1>
+    <section aria-labelledby="play-heading">
+      <h1 className="font-mono text-sm uppercase tracking-wider text-primary">Game History</h1>
       <h2>View All Your Games</h2>
     </section>
   );
