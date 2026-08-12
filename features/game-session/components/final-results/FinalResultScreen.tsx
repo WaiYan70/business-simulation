@@ -3,8 +3,8 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-import { useGameSessionStore } from "@/lib/stores/game-session-store";
-import { ProfessorState, TOTAL_QUARTERS } from "../session/GameSession";
+import { useGameSessionStore } from "../../stores/game-session-store";
+import { ProfessorState, TOTAL_QUARTERS } from "@/simulation/GameSession";
 import GameSessionHeader from "../shared/GameSessionHeader";
 import FinalResults from "./FinalResults";
 import GameSessionLoading from "../shared/GameSessionLoading";

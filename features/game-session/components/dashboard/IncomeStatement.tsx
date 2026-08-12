@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { formatYen, QuarterRecord } from "../session/GameSession";
+import { formatYen, QuarterRecord } from "@/simulation/GameSession";
 
 type IncomeStatementProps = {
   record?: QuarterRecord;

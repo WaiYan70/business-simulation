@@ -1,4 +1,4 @@
-import GameSessionHeader from "@/components/game/shared/GameSessionHeader";
+import GameSessionHeader from "@/features/game-session/components/shared/GameSessionHeader";
 
 export default function FinalResultsLoading() {
   return (

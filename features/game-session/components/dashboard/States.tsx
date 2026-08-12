@@ -6,7 +6,7 @@ import {
   BusinessState,
   formatYen,
   QuarterRecord,
-} from "../session/GameSession";
+} from "@/simulation/GameSession";
 
 type StatesProps = {
   state: BusinessState;

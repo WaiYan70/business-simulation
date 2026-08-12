@@ -8,7 +8,7 @@ import {
   type GameSession,
   type PlayerDecision,
   type QuarterRecord,
-} from "@/components/game/session/GameSession";
+} from "@/simulation/GameSession";
 
 export const GAME_SESSION_STORAGE_KEY = "kissaten-tycoon:game-session:v1";
 

@@ -6,13 +6,9 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Slider } from "@/components/ui/slider";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import QuarterCommit from "@/components/game/dashboard/QuarterCommit";
-import { useGameSessionStore } from "@/lib/stores/game-session-store";
-import {
-  type BigMove,
-  type BigMoveChoice,
-  formatYen,
-} from "../session/GameSession";
+import QuarterCommit from "./QuarterCommit";
+import { useGameSessionStore } from "../../stores/game-session-store";
+import { type BigMove, type BigMoveChoice, formatYen } from "@/simulation/GameSession";
 
 const bigMoveOptions: Array<{
   value: BigMoveChoice;

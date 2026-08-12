@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { formatQuarterSeason } from "../session/GameSession";
+import { formatQuarterSeason } from "@/simulation/GameSession";
 
 type GameSessionHeaderProps = {
   quarter?: number;

@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { ArrowRight, CheckCircle2, ReceiptText } from "lucide-react";
 
-import ProfessorDebrief from "@/components/game/quarter-results/ProfessorDebrief";
+import ProfessorDebrief from "./ProfessorDebrief";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -13,7 +13,7 @@ import {
   type BigMove,
   type ProfessorState,
   type QuarterRecord,
-} from "../session/GameSession";
+} from "@/simulation/GameSession";
 
 type QuarterResultsProps = {
   record: QuarterRecord;

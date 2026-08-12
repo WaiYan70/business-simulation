@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import { CircleAlert, LoaderCircle, RotateCcw } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { TOTAL_QUARTERS } from "../session/GameSession";
-import { useGameSessionStore } from "@/lib/stores/game-session-store";
+import { TOTAL_QUARTERS } from "@/simulation/GameSession";
+import { useGameSessionStore } from "../../stores/game-session-store";
 
 type CommitStatus = "idle" | "processing" | "slow" | "error";
 

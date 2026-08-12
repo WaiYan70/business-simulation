@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { CircleAlert, History, RotateCcw } from "lucide-react";
 
-import GameSessionHeader from "@/components/game/shared/GameSessionHeader";
+import GameSessionHeader from "@/features/game-session/components/shared/GameSessionHeader";
 import { Button } from "@/components/ui/button";
 
 export default function FinalResultsError({ reset }: { reset: () => void }) {

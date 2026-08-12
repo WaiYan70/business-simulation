@@ -1,6 +1,6 @@
 "use client";
 
-import { GAME_SESSION_STORAGE_KEY, useGameSessionStore } from "@/lib/stores/game-session-store";
+import { GAME_SESSION_STORAGE_KEY, useGameSessionStore } from "../stores/game-session-store";
 import { ReactNode, useEffect } from "react";
 
 export default function GameSessionHydration({

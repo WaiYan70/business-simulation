@@ -2,22 +2,21 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-
-import Costs from "@/components/game/dashboard/Costs";
-import Decisions from "@/components/game/dashboard/Decisions";
-import Events from "@/components/game/dashboard/Events";
-import IncomeStatement from "@/components/game/dashboard/IncomeStatement";
-import States from "@/components/game/dashboard/States";
-import Summary from "@/components/game/dashboard/Summary";
+import Costs from "@/features/game-session/components/dashboard/Costs";
+import Decisions from "@/features/game-session/components/dashboard/Decisions";
+import Events from "@/features/game-session/components/dashboard/Events";
+import IncomeStatement from "@/features/game-session/components/dashboard/IncomeStatement";
+import States from "@/features/game-session/components/dashboard/States";
+import Summary from "@/features/game-session/components/dashboard/Summary";
 import {
   getCurrentBusinessState,
   getLatestQuarterRecord,
   getScenario,
   TOTAL_QUARTERS,
-} from "@/components/game/session/GameSession";
-import GameSessionHeader from "@/components/game/shared/GameSessionHeader";
-import GameSessionLoading from "@/components/game/shared/GameSessionLoading";
-import { useGameSessionStore } from "@/lib/stores/game-session-store";
+} from "@/simulation/GameSession";
+import GameSessionHeader from "@/features/game-session/components/shared/GameSessionHeader";
+import GameSessionLoading from "@/features/game-session/components/shared/GameSessionLoading";
+import { useGameSessionStore } from "@/features/game-session/stores/game-session-store";
 
 export default function Dashboard() {
   const router = useRouter();

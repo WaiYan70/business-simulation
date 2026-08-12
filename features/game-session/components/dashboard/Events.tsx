@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { QuarterScenario } from "../session/GameSession";
+import { QuarterScenario } from "@/simulation/GameSession";
 
 type EventsProps = {
   scenario: QuarterScenario;

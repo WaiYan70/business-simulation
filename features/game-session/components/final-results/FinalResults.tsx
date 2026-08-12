@@ -13,7 +13,7 @@ import {
 
 import FinalProfessorReview, {
   type FinalProfessorState,
-} from "@/components/game/final-results/FinalProfessorReview";
+} from "./FinalProfessorReview";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -25,7 +25,7 @@ import {
   INITIAL_BUSINESS_STATE,
   materializeQuarterRecord,
   type QuarterRecord,
-} from "../session/GameSession";
+} from "@/simulation/GameSession";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
