@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function SettingPage() {
   return (
     <section>
-      <h1>Game Center</h1>
+      <h1 className="font-mono text-sm uppercase tracking-wider text-primary">Game Center</h1>
       <h2>Manage your cafe</h2>
       <p>
         {" "}
