@@ -1,4 +1,4 @@
-export default function PlayPage() {
+export default function SettingsPage() {
   return (
     <section aria-labelledby="play-heading">
       <h1 className="font-mono text-sm uppercase tracking-wider text-primary">Game Setting</h1>

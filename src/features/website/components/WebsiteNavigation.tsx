@@ -17,7 +17,7 @@ export default function WebsiteNavigation() {
           href="/"
           className="font-serif text-xl font-bold tracking-wide text-foreground"
         >
-          KISSATEN{" "}
+          KISSATEN
           <span className="bg-primary/20 px-1 text-primary">TYCOON</span>
         </Link>
         <ul className="flex items-center gap-4">
@@ -25,7 +25,7 @@ export default function WebsiteNavigation() {
             <li key={item.href}>
               <Link
                 href={item.href}
-                className="text-sm font-medium text-muted-foreground transition-colors hover:textext-foreground"
+                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
               >
                 {item.label}
               </Link>
