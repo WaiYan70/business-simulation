@@ -1,9 +1,9 @@
 import FinalResultScreen from "@/features/game-session/components/final-results/FinalResultScreen";
-import { ProfessorState } from "@/simulation/GameSession";
+import { parseProfessorState } from "@/features/game-session/professor-state";
 
 type FinalResultsPageProps = {
   searchParams: Promise<{
-    professor?: ProfessorState;
+    professor?: string | string[];
   }>;
 };
 
@@ -13,6 +13,8 @@ export default async function FinalResultsPage({
   const params = await searchParams;
 
   return (
-    <FinalResultScreen professorState={params.professor ?? "loading"} />
+    <FinalResultScreen
+      professorState={parseProfessorState(params.professor)}
+    />
   );
 }

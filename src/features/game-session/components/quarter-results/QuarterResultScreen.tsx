@@ -6,8 +6,8 @@ import {
   getScenario,
   parseQuarter,
   TOTAL_QUARTERS,
-  type ProfessorState,
 } from "@/simulation/GameSession";
+import type { ProfessorState } from "@/features/game-session/professor-state";
 import { useGameSessionStore } from "../../stores/game-session-store";
 import { useEffect } from "react";
 import GameSessionHeader from "../shared/GameSessionHeader";

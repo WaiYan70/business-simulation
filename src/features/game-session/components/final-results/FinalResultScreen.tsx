@@ -4,7 +4,8 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import { useGameSessionStore } from "../../stores/game-session-store";
-import { ProfessorState, TOTAL_QUARTERS } from "@/simulation/GameSession";
+import type { ProfessorState } from "@/features/game-session/professor-state";
+import { TOTAL_QUARTERS } from "@/simulation/GameSession";
 import GameSessionHeader from "../shared/GameSessionHeader";
 import FinalResults from "./FinalResults";
 import GameSessionLoading from "../shared/GameSessionLoading";

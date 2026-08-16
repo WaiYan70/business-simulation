@@ -3,8 +3,6 @@ import { SCENARIOS } from "./sample-data-game-scenario";
 export const TOTAL_QUARTERS = 8;
 export const GAME_SESSION_SCHEMA_VERSION = 2;
 
-export type ProfessorState = "loading" | "slow" | "error" | "fallback";
-
 export type QuarterNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 export type GameStatus = "active" | "completed";
 export type BigMove = "staff-training" | "loyalty-program" | "renovate";

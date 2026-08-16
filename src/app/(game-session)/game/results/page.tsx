@@ -1,10 +1,10 @@
 import QuarterResultScreen from "@/features/game-session/components/quarter-results/QuarterResultScreen";
-import { ProfessorState } from "@/simulation/GameSession";
+import { parseProfessorState } from "@/features/game-session/professor-state";
 
 type ResultsPageProps = {
   searchParams: Promise<{
-    quarter?: string;
-    professor?: ProfessorState;
+    quarter?: string | string[];
+    professor?: string | string[];
   }>;
 };
 
@@ -13,8 +13,10 @@ export default async function ResultsPage({ searchParams }: ResultsPageProps) {
 
   return (
     <QuarterResultScreen
-      requestedQuarter={params.quarter}
-      professorState={params.professor ?? "loading"}
+      requestedQuarter={
+        typeof params.quarter === "string" ? params.quarter : undefined
+      }
+      professorState={parseProfessorState(params.professor)}
     />
   );
 }

@@ -8,12 +8,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
-    describeCapacityCoverage,
+  describeCapacityCoverage,
   formatYen,
   type BigMove,
-  type ProfessorState,
   type QuarterRecord,
 } from "@/simulation/GameSession";
+import type { ProfessorState } from "@/features/game-session/professor-state";
 
 type QuarterResultsProps = {
   record: QuarterRecord;
