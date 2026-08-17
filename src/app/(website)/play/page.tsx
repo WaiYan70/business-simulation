@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function SettingPage() {
+export default function PlayPage() {
   return (
     <section>
       <h1 className="font-mono text-sm uppercase tracking-wider text-primary">Game Center</h1>
