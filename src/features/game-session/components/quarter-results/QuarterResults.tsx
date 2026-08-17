@@ -13,7 +13,7 @@ import {
   type BigMove,
   type QuarterRecord,
 } from "@/simulation/GameSession";
-import type { ProfessorState } from "@/features/game-session/professor-state";
+import type { ProfessorState } from "../../lib/professor-state";
 
 type QuarterResultsProps = {
   record: QuarterRecord;

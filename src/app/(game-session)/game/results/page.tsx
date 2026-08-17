@@ -1,5 +1,5 @@
 import QuarterResultScreen from "@/features/game-session/components/quarter-results/QuarterResultScreen";
-import { parseProfessorState } from "@/features/game-session/professor-state";
+import { parseProfessorState } from "@/features/game-session/lib/professor-state";
 
 type ResultsPageProps = {
   searchParams: Promise<{

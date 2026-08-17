@@ -1,5 +1,5 @@
 import FinalResultScreen from "@/features/game-session/components/final-results/FinalResultScreen";
-import { parseProfessorState } from "@/features/game-session/professor-state";
+import { parseProfessorState } from "@/features/game-session/lib/professor-state";
 
 type FinalResultsPageProps = {
   searchParams: Promise<{
