@@ -3,7 +3,7 @@ import Link from "next/link";
 const navigationItems = [
   { href: "/play", label: "Play" },
   { href: "/history", label: "History" },
-  { href: "/setting", label: "Setting" },
+  { href: "/settings", label: "Settings" },
 ] as const;
 
 export default function WebsiteNavigation() {
