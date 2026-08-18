@@ -1,4 +1,4 @@
-import { GuestPrincipal, PlayerPrincipal } from "@/auth/player-principle"
+import { GuestPrincipal, PlayerPrincipal } from "@/auth/player-principle";
 
 export type GuestEntitlementInput = Readonly<{
   principal: GuestPrincipal;
@@ -13,4 +13,6 @@ export type PlayerEntitlementInput = Readonly<{
   now: Date;
 }>;
 
-export type EvaluateEntitlementInput = | GuestEntitlementInput | PlayerEntitlementInput
+export type EvaluateEntitlementInput =
+  | GuestEntitlementInput
+  | PlayerEntitlementInput;
