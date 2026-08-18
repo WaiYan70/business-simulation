@@ -6,8 +6,10 @@ import {
 
 export function evaluatedEntitlement(
   input: EvaluateEntitlementInput,
-  dailyLimit: number = 5,
+  dailyLimit: number = 3,
 ): EntitlementStatus {
+
+  // Guest Explicit Input Flow
   if (input.principal.kind === "guest" && "guestTrailCompleted" in input) {
     const limit = 1;
     const completedCount = input.guestTrailCompleted ? 1 : 0;
@@ -46,6 +48,7 @@ export function evaluatedEntitlement(
     };
   }
 
+  // Player Input Flow (Narrowed to PlayerEntitlementInput)
   const playerInput = input as PlayerEntitlementInput;
 
   if (
@@ -55,9 +58,11 @@ export function evaluatedEntitlement(
     throw new Error("completed Count must be non-negative integer");
   }
 
+  // set boundaries whether the player principal is a guest or player
   const limit = playerInput.principal.kind === "guest" ? 1 : dailyLimit;
   const remaining = Math.max(0, limit - playerInput.completedCount);
 
+  // Get today's UTC quota window end
   const resetDate = new Date(playerInput.now);
   resetDate.setUTCHours(24, 0, 0, 0);
   const resetAt = resetDate.toISOString();
