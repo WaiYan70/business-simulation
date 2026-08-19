@@ -1,4 +1,4 @@
-import { GuestPrincipal, UserPrincipal } from "@/auth/player-principle";
+import type { GuestPrincipal, UserPrincipal } from "@/auth/player-principle";
 
 export type EntitlementReason =
   | "new_game_available"

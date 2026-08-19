@@ -1,4 +1,4 @@
-import {
+import type {
   EntitlementStatus,
   EvaluateEntitlementInput,
 } from "./entitlements-types";
@@ -10,7 +10,7 @@ export function evaluateEntitlement(
 ): EntitlementStatus {
   // Guest Explicit Input Flow
   if ("guestTrialCompleted" in input) {
-    const guestLimit = GAME_ALLOWANCE_POLICY.guestLifeTimeCompletionLimit;
+    const guestLimit = GAME_ALLOWANCE_POLICY.guestLifetimeCompletionLimit;
     const completedCount = input.guestTrialCompleted ? 1 : 0;
     const remaining = Math.max(0, guestLimit - completedCount);
 
@@ -52,7 +52,7 @@ export function evaluateEntitlement(
 
   // Player Input Flow (Narrowed to PlayerEntitlementInput)
   if (input.completedCount < 0 || !Number.isInteger(input.completedCount)) {
-    throw new Error("completed Count must be non-negative integer");
+    throw new Error("Completed count must be a non-negative integer");
   }
 
   // set boundaries whether the player principal is a guest or player
@@ -63,7 +63,7 @@ export function evaluateEntitlement(
   const { end } = getUtcQuotaWindow(input.now);
   const resetAt = end.toISOString();
 
-  // Check the game id is valid or not, and then check how many games player left to play
+  // An existing active game should be resumed instead of starting another game.
   if (input.activeGameId !== null) {
     return {
       allowed: true,
