@@ -4,7 +4,7 @@ export type EntitlementReason =
   | "new_game_available"
   | "resume_active_game"
   | "guest_trial_used"
-  | "daily_limited_reached";
+  | "daily_limit_reached";
 
 export type EntitlementStatus = Readonly<{
   allowed: boolean;
@@ -14,7 +14,7 @@ export type EntitlementStatus = Readonly<{
   remaining: number;
   resetAt: string | null;
   activeGameId: string | null;
-}>
+}>;
 
 export type GuestEntitlementInput = Readonly<{
   principal: GuestPrincipal;

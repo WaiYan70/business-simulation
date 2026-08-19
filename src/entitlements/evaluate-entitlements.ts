@@ -5,7 +5,7 @@ import {
 import { GAME_ALLOWANCE_POLICY } from "./policy";
 import { getUtcQuotaWindow } from "./utc-quota-window";
 
-export function evaluatedEntitlement(
+export function evaluateEntitlement(
   input: EvaluateEntitlementInput,
 ): EntitlementStatus {
   // Guest Explicit Input Flow
@@ -14,10 +14,11 @@ export function evaluatedEntitlement(
     const completedCount = input.guestTrialCompleted ? 1 : 0;
     const remaining = Math.max(0, guestLimit - completedCount);
 
-    if (input.activeGameId !== null) {
+    // Check the guest trial is completed and then check the game id is valid or not
+    if (input.guestTrialCompleted) {
       return {
-        allowed: true,
-        reason: "resume_active_game",
+        allowed: false,
+        reason: "guest_trial_used",
         completedCount,
         limit: guestLimit,
         remaining,
@@ -26,10 +27,10 @@ export function evaluatedEntitlement(
       };
     }
 
-    if (remaining === 0) {
+    if (input.activeGameId !== null) {
       return {
-        allowed: false,
-        reason: "guest_trial_used",
+        allowed: true,
+        reason: "resume_active_game",
         completedCount,
         limit: guestLimit,
         remaining,
@@ -62,7 +63,8 @@ export function evaluatedEntitlement(
   const { end } = getUtcQuotaWindow(input.now);
   const resetAt = end.toISOString();
 
-  if (input.activeGameId) {
+  // Check the game id is valid or not, and then check how many games player left to play
+  if (input.activeGameId !== null) {
     return {
       allowed: true,
       reason: "resume_active_game",
@@ -88,7 +90,7 @@ export function evaluatedEntitlement(
 
   return {
     allowed: false,
-    reason: "daily_limited_reached",
+    reason: "daily_limit_reached",
     completedCount: input.completedCount,
     limit: playerLimit,
     remaining,

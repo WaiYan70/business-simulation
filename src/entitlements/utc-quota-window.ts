@@ -5,7 +5,7 @@ export type UtcQuotaWindow = Readonly<{
 
 export function getUtcQuotaWindow(now: Date): UtcQuotaWindow {
   if (!Number.isFinite(now.getTime())) {
-    throw new Error("Current time must be a valide date");
+    throw new Error("Current time must be a valid date");
   }
 
   const start = new Date(
