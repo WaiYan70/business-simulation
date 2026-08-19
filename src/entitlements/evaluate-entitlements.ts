@@ -3,35 +3,35 @@ import {
   EvaluateEntitlementInput,
   PlayerEntitlementInput,
 } from "./entitlements-types";
+import { GAME_ALLOWANCE_POLICY } from "./policy";
+import { getUtcQuotaWindow } from "./utc-quota-window";
 
 export function evaluatedEntitlement(
   input: EvaluateEntitlementInput,
-  dailyLimit: number = 3,
 ): EntitlementStatus {
-
   // Guest Explicit Input Flow
-  if (input.principal.kind === "guest" && "guestTrailCompleted" in input) {
-    const limit = 1;
-    const completedCount = input.guestTrailCompleted ? 1 : 0;
+  if (input.principal.kind === "guest" && "guestTrialCompleted" in input) {
+    const guestLimit = GAME_ALLOWANCE_POLICY.guestLifeTimeCompletionLimit;
+    const completedCount = input.guestTrialCompleted ? 1 : 0;
 
     if (input.activeGameId) {
       return {
         allowed: true,
         reason: "resume_active_game",
         completedCount,
-        limit,
+        limit: guestLimit,
         remaining: 0,
         resetAt: null,
         activeGameId: input.activeGameId,
       };
     }
 
-    if (input.guestTrailCompleted) {
+    if (input.guestTrialCompleted) {
       return {
         allowed: false,
         reason: "daily_limited_reached",
         completedCount,
-        limit,
+        limit: guestLimit,
         remaining: 0,
         resetAt: null,
         activeGameId: null,
@@ -41,7 +41,7 @@ export function evaluatedEntitlement(
       allowed: true,
       reason: "new_game_available",
       completedCount,
-      limit,
+      limit: guestLimit,
       remaining: 1,
       resetAt: null,
       activeGameId: null,
@@ -59,13 +59,13 @@ export function evaluatedEntitlement(
   }
 
   // set boundaries whether the player principal is a guest or player
-  const limit = playerInput.principal.kind === "guest" ? 1 : dailyLimit;
+  const playerLimit = GAME_ALLOWANCE_POLICY.authenticatedDailyCompletionLimit;
+  const limit = playerInput.principal.kind === "guest" ? 1 : playerLimit;
   const remaining = Math.max(0, limit - playerInput.completedCount);
 
   // Get today's UTC quota window end
-  const resetDate = new Date(playerInput.now);
-  resetDate.setUTCHours(24, 0, 0, 0);
-  const resetAt = resetDate.toISOString();
+  const { end } = getUtcQuotaWindow(input.now);
+  const resetAt = end.toISOString();
 
   if (playerInput.activeGameId) {
     return {
@@ -75,8 +75,8 @@ export function evaluatedEntitlement(
       limit,
       remaining,
       resetAt,
-      activeGameId: playerInput.activeGameId
-    }
+      activeGameId: playerInput.activeGameId,
+    };
   }
 
   if (remaining > 0) {
@@ -88,7 +88,7 @@ export function evaluatedEntitlement(
       remaining,
       resetAt,
       activeGameId: null,
-    }
+    };
   }
 
   return {

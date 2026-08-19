@@ -18,7 +18,7 @@ export type EntitlementStatus = Readonly<{
 
 export type GuestEntitlementInput = Readonly<{
   principal: GuestPrincipal;
-  guestTrailCompleted: boolean;
+  guestTrialCompleted: boolean;
   activeGameId: string | null;
 }>;
 
