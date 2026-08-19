@@ -5,16 +5,24 @@ import type {
 import { GAME_ALLOWANCE_POLICY } from "./policy";
 import { getUtcQuotaWindow } from "./utc-quota-window";
 
+/**
+ * Determines whether a principal may start a new game or resume an active game.
+ *
+ * Game counts and active-game data must come from trusted server-side records.
+ * This result must not authorize final completion by itself;
+ * completion quota must be rechecked and consumed in the completion transaction.
+ */
+
 export function evaluateEntitlement(
   input: EvaluateEntitlementInput,
 ): EntitlementStatus {
-  // Guest Explicit Input Flow
+  // Guest allowance is lifetime-based and therefore has no reset window.
   if ("guestTrialCompleted" in input) {
     const guestLimit = GAME_ALLOWANCE_POLICY.guestLifetimeCompletionLimit;
     const completedCount = input.guestTrialCompleted ? 1 : 0;
     const remaining = Math.max(0, guestLimit - completedCount);
 
-    // Check the guest trial is completed and then check the game id is valid or not
+    // A completed guest trial permanently blocks starting another guest game.
     if (input.guestTrialCompleted) {
       return {
         allowed: false,
@@ -27,6 +35,7 @@ export function evaluateEntitlement(
       };
     }
 
+    // One active game per principal prevents creating unlimited unfinished games.
     if (input.activeGameId !== null) {
       return {
         allowed: true,
@@ -50,16 +59,16 @@ export function evaluateEntitlement(
     };
   }
 
-  // Player Input Flow (Narrowed to PlayerEntitlementInput)
+  // Player Input Flow
   if (input.completedCount < 0 || !Number.isInteger(input.completedCount)) {
     throw new Error("Completed count must be a non-negative integer");
   }
 
-  // set boundaries whether the player principal is a guest or player
+  // Authenticated allowance is based on completions in the current UTC day.
   const playerLimit = GAME_ALLOWANCE_POLICY.authenticatedDailyCompletionLimit;
   const remaining = Math.max(0, playerLimit - input.completedCount);
 
-  // Get today's UTC quota window end
+  // The quota resets at the end of the current UTC window.
   const { end } = getUtcQuotaWindow(input.now);
   const resetAt = end.toISOString();
 
