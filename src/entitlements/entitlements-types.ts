@@ -1,4 +1,4 @@
-import { GuestPrincipal, PlayerPrincipal } from "@/auth/player-principle";
+import { GuestPrincipal, UserPrincipal } from "@/auth/player-principle";
 
 export type EntitlementReason =
   | "new_game_available"
@@ -22,8 +22,8 @@ export type GuestEntitlementInput = Readonly<{
   activeGameId: string | null;
 }>;
 
-export type PlayerEntitlementInput = Readonly<{
-  principal: PlayerPrincipal;
+export type AuthenticatedEntitlementInput = Readonly<{
+  principal: UserPrincipal;
   completedCount: number;
   activeGameId: string | null;
   now: Date;
@@ -31,4 +31,4 @@ export type PlayerEntitlementInput = Readonly<{
 
 export type EvaluateEntitlementInput =
   | GuestEntitlementInput
-  | PlayerEntitlementInput;
+  | AuthenticatedEntitlementInput;
